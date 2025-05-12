@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LKPB Nusikaltimų Tyrimas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: sans-serif; /* Fallback font */
+            /* Background placeholder - REPLACE with your actual comic hero image */
+            background-image: url('https://placehold.co/800x1600/4a4a4a/ffffff?text=Dynamic+Comic+Scene+BG');
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed; /* Basic parallax effect */
+            min-height: 100vh;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            position: relative; /* Needed for pseudo-element overlay */
+        }
+
+        /* Optional: Add a subtle pattern overlay for more comic texture */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px);
+            background-size: 10px 10px;
+            opacity: 0.3;
+            z-index: 0; /* Behind content */
+             background-attachment: fixed; /* Keep overlay fixed too */
+        }
+
+
+        /* Ensure content stays above the overlay */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh; /* Ensure wrapper takes at least full height */
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* Comic font style */
+        .font-comic {
+            font-family: 'Bangers', cursive;
+            letter-spacing: 2px;
+            /* Simple text stroke effect */
+            -webkit-text-stroke: 1px black;
+            text-stroke: 1px black;
+            color: yellow; /* Adjust color as needed */
+            text-shadow: 3px 3px 0 #000,
+                         -1px -1px 0 #000,
+                         1px -1px 0 #000,
+                         -1px 1px 0 #000,
+                         1px 1px 0 #000;
+        }
+
+        /* Comic style box (for clickable crimes and panels) */
+        .comic-box {
+            border: 4px solid black;
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+            box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.7);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            cursor: default; /* Default cursor for panels */
+            transform-origin: center center; /* Set transform origin for animations */
+        }
+        .clickable-box { /* Specific style for clickable boxes */
+             cursor: pointer;
+        }
+        .clickable-box:active {
+            transform: translate(3px, 3px);
+            box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Comic style modal */
+        .comic-modal {
+            border: 5px solid black;
+            background-color: #fff;
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.8);
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9); /* Start slightly smaller */
+            z-index: 50;
+            opacity: 0;
+            visibility: hidden;
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.3s ease, visibility 0.3s ease;
+            max-width: 90%; /* Ensure modal fits mobile screen */
+            width: 500px; /* Max width on larger screens if needed */
+        }
+        .comic-modal.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Comic style close button */
+        .comic-close-btn {
+            font-family: 'Bangers', cursive;
+            font-size: 2rem;
+            line-height: 1;
+            color: white;
+            background-color: red;
+            border: 3px solid black;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+        .comic-close-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Scroll animation setup */
+        .scroll-section {
+            opacity: 0; /* Start hidden */
+            /* Note: Transitions removed here as Anime.js handles the animation */
+        }
+         /* Keep visible state for fallback or if JS fails */
+        .scroll-section.visible {
+            opacity: 1;
+        }
+
+
+        /* Basic overlay for modals */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 40;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Skewed panel effect */
+        .skewed-panel {
+            transform: skewY(-2deg); /* Slight skew */
+        }
+        .skewed-panel > * {
+             transform: skewY(2deg); /* Counter-skew content */
+        }
+
+    </style>
+</head>
+<body class="bg-gray-800"> <div id="modal-overlay" class="modal-overlay"></div>
+
+    <div class="content-wrapper">
+
+        <div class="flex flex-col items-center justify-center p-6 text-center min-h-[60vh] md:min-h-[70vh]">
+            <h1 id="main-title" class="font-comic text-5xl sm:text-6xl md:text-7xl mb-10 mt-16 scroll-section" data-animation="fadeInUp">
+                Ištirk nusikaltimus kartu su LKPB
+            </h1>
+            <p id="subtitle" class="text-yellow-300 text-lg md:text-xl font-semibold scroll-section" data-animation="fadeInUp" data-delay="200">
+                Comic Con paslaptys laukia tavęs!
+            </p>
+        </div>
+
+        <div class="scroll-section w-full p-6 md:p-10" data-animation="slideInLeft">
+            <div class="comic-box max-w-2xl mx-auto p-5 rounded-lg text-center">
+                <h2 class="font-comic text-3xl text-purple-600 mb-3">Kas čia vyksta?!</h2>
+                <p class="text-gray-700">
+                    Didžiausio populiariosios kultūros renginio metu įvyko keletas paslaptingų incidentų. Tik aštriausias protas gali išnarplioti šias bylas. Ar esi pasiruošęs?
+                </p>
+            </div>
+        </div>
+
+        <div class="scroll-section w-full p-6 md:p-10 my-10 md:my-16" data-animation="scaleUp">
+             <div class="comic-box skewed-panel max-w-2xl mx-auto p-6 rounded-lg bg-blue-100">
+                 <h2 class="font-comic text-3xl text-blue-700 mb-3 text-center">Tavo Užduotis</h2>
+                 <p class="text-gray-800 text-center">
+                     Pasirink vieną iš žemiau pateiktų bylų ir sek nuorodas. Kiekviena mįslė priartins tave prie tiesos! Įrodyk, kad esi vertas LKPB detektyvo vardo.
+                 </p>
+             </div>
+         </div>
+
+         <div class="scroll-section w-full p-6 md:p-10" data-animation="slideInRight">
+            <div class="comic-box max-w-2xl mx-auto p-3 rounded-lg text-center bg-red-100">
+                 <img src="https://placehold.co/600x300/ef4444/ffffff?text=Comic+Action+Placeholder" alt="Comic Action Scene" class="w-full h-auto rounded border-2 border-black mb-3">
+                <h3 class="font-comic text-2xl text-red-700">Įkalčiai laukia!</h3>
+                 <p class="text-gray-700 px-3 pb-2">
+                     Atidžiai išnagrinėk kiekvieną detalę. Atsakymai gali slėptis netikėčiausiose vietose.
+                 </p>
+            </div>
+        </div>
+
+
+        <div id="crime-boxes-section" class="scroll-section w-full p-6 pb-12 mt-16 md:mt-24">
+             <h2 id="crime-title" class="font-comic text-4xl text-center text-yellow-300 mb-8 opacity-0">Pasirink Bylą:</h2>
+            <div id="crime-boxes-container" class="max-w-lg mx-auto grid grid-cols-1 gap-8">
+                <div id="box-steam" class="comic-box clickable-box p-5 text-center rounded-lg hover:bg-yellow-100 opacity-0">
+                    <h3 class="font-comic text-3xl text-blue-600">Steam Accounto Vagystė</h3>
+                </div>
+
+                <div id="box-joffrey" class="comic-box clickable-box p-5 text-center rounded-lg hover:bg-yellow-100 opacity-0">
+                    <h3 class="font-comic text-3xl text-red-600">King Joffrey Pagrobimas</h3>
+                </div>
+            </div>
+        </div>
+
+         <footer class="text-center p-4 mt-auto text-gray-400 text-sm scroll-section" data-animation="fadeIn">
+            LKPB @ Comic Con Baltics | Visos teisės saugomos (arba ne?)
+        </footer>
+
+    </div> <div id="modal-steam" class="comic-modal p-6 rounded-lg">
+        <button class="comic-close-btn close-modal-btn">X</button>
+        <h3 class="font-comic text-2xl text-blue-700 mb-4">Steam Accounto Vagystė</h3>
+        <p class="text-gray-800">
+            Šiandien buvo įvykdytas šiukštus nusikaltimas: pavogtas pagrindinis Comic Con Steam accountas, kuriame yra daugiau nei 2000 žaidimų. Padėk atgauti Steam accounto slaptažodį naudojant šias mysles.
+        </p>
+    </div>
+
+    <div id="modal-joffrey" class="comic-modal p-6 rounded-lg">
+        <button class="comic-close-btn close-modal-btn">X</button>
+        <h3 class="font-comic text-2xl text-red-700 mb-4">King Joffrey Pagrobimas</h3>
+        <p class="text-gray-800">
+            Pagrobtas Game of Thrones žvaigždė Jack Gleeson arba žinomas kaip King Joffrey Baratheon. Nors ir daugėlio nekenčiamas, jis privalo sugrįžti į sceną.
+        </p>
+    </div>
+
+    <script>
+        // --- Elements ---
+        const boxSteam = document.getElementById('box-steam');
+        const boxJoffrey = document.getElementById('box-joffrey');
+        const modalSteam = document.getElementById('modal-steam');
+        const modalJoffrey = document.getElementById('modal-joffrey');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const closeModalBtns = document.querySelectorAll('.close-modal-btn');
+        const scrollSections = document.querySelectorAll('.scroll-section');
+        const crimeBoxesSection = document.getElementById('crime-boxes-section'); // Specific section for crime boxes
+
+        // --- Modal Functions ---
+        function openModal(modalElement) {
+            modalOverlay.classList.add('active');
+            modalElement.classList.add('active');
+            anime({
+                targets: modalElement,
+                scale: [0.8, 1],
+                opacity: [0, 1],
+                duration: 400,
+                easing: 'easeOutElastic(1, .8)'
+            });
+             anime({
+                targets: modalOverlay,
+                opacity: [0, 1],
+                duration: 300,
+                easing: 'linear'
+            });
+        }
+
+        function closeModal(modalElement) {
+            anime({
+                targets: modalElement,
+                scale: [1, 0.8],
+                opacity: [1, 0],
+                duration: 300,
+                easing: 'easeInExpo',
+                complete: () => {
+                     modalElement.classList.remove('active');
+                }
+            });
+            anime({
+                targets: modalOverlay,
+                opacity: [1, 0],
+                duration: 300,
+                easing: 'linear',
+                 complete: () => {
+                     modalOverlay.classList.remove('active');
+                }
+            });
+        }
+
+        // --- Modal Event Listeners ---
+        boxSteam.addEventListener('click', () => openModal(modalSteam));
+        boxJoffrey.addEventListener('click', () => openModal(modalJoffrey));
+
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const modalToClose = btn.closest('.comic-modal');
+                if (modalToClose) {
+                    closeModal(modalToClose);
+                }
+            });
+        });
+
+        modalOverlay.addEventListener('click', () => {
+            const activeModal = document.querySelector('.comic-modal.active');
+            if (activeModal) {
+                closeModal(activeModal);
+            }
+        });
+
+        // --- Scroll Animations with Anime.js ---
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px 0px -50px 0px', // Trigger a bit before it's fully in view
+            threshold: 0.1 // 10% visible
+        };
+
+        // Function to apply the main animation to the section and a subtle one to the inner box
+        const animateSectionAndBox = (target, animationType, delay = 0) => {
+             let sectionAnimationProps = {
+                 targets: target,
+                 opacity: [0, 1],
+                 duration: 800,
+                 easing: 'easeOutExpo',
+                 delay: delay
+             };
+
+             // Define main section animation based on type
+             switch (animationType) {
+                 case 'fadeInUp':
+                     sectionAnimationProps.translateY = [50, 0];
+                     break;
+                 case 'fadeInDown':
+                     sectionAnimationProps.translateY = [-50, 0];
+                      break;
+                 case 'slideInLeft':
+                     sectionAnimationProps.translateX = [-100, 0];
+                     break;
+                 case 'slideInRight':
+                     sectionAnimationProps.translateX = [100, 0];
+                     break;
+                 case 'scaleUp':
+                     sectionAnimationProps.scale = [0.85, 1]; // Slightly less drastic scale
+                     break;
+                 case 'fadeIn':
+                 default:
+                     // Opacity is already set
+                     break;
+             }
+             anime(sectionAnimationProps);
+
+             // Find direct child comic-box (if any) and apply subtle animation
+             const innerComicBox = target.querySelector(':scope > .comic-box'); // :scope ensures direct child
+             if (innerComicBox) {
+                 anime({
+                     targets: innerComicBox,
+                     // Example subtle animation: slight scale bounce and rotation
+                     scale: [0.95, 1],
+                     rotate: [-2, 0], // Small rotation
+                     opacity: [0.8, 1], // Can also fade it slightly differently
+                     duration: 600,
+                     easing: 'easeOutSine', // Smoother easing for subtle effect
+                     delay: delay + 150 // Start slightly after the main animation
+                 });
+             }
+             // Handle specific elements like the subtitle
+             if(target.id === 'subtitle') {
+                 anime({
+                     targets: target,
+                     opacity: [0, 1],
+                     translateY: [30, 0],
+                     duration: 800,
+                     easing: 'easeOutExpo',
+                     delay: delay
+                 });
+             }
+        };
+
+        // Specific animation for the crime boxes section
+        const animateCrimeBoxes = (target) => {
+            const title = target.querySelector('#crime-title');
+            const boxes = target.querySelectorAll('#crime-boxes-container .comic-box');
+
+            // Use a timeline for sequential animation
+            const tl = anime.timeline({
+                easing: 'easeOutExpo', // Default easing for the timeline
+                duration: 600 // Default duration
+            });
+
+            tl.add({
+                targets: title,
+                translateY: [20, 0],
+                opacity: [0, 1],
+                duration: 500
+            })
+            .add({
+                targets: boxes,
+                translateY: [40, 0], // Move up from below
+                opacity: [0, 1],
+                scale: [0.9, 1], // Slight scale up
+                delay: anime.stagger(150, {start: 100}), // Stagger the boxes, start after 100ms
+                easing: 'easeOutElastic(1, .7)' // Bouncier easing for boxes
+            }, '-=200'); // Start this step slightly before the previous one finishes
+        };
+
+
+        const observerCallback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = entry.target;
+
+                    // Special handling for the crime boxes section
+                    if (target.id === 'crime-boxes-section') {
+                        animateCrimeBoxes(target);
+                    } else {
+                        // Handle all other scroll sections
+                        const animationType = target.dataset.animation || 'fadeInUp';
+                        const delay = parseInt(target.dataset.delay) || 0;
+                        animateSectionAndBox(target, animationType, delay);
+                    }
+
+                    target.classList.add('visible'); // Mark as visible
+                    observer.unobserve(target); // Stop observing once animated
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+        scrollSections.forEach(section => {
+             // Set initial opacity via CSS, Anime.js handles transforms
+             observer.observe(section);
+        });
+
+
+        // --- Simple Parallax Background Adjustment ---
+         let lastScrollY = window.scrollY;
+         let ticking = false;
+
+         function updateBackgroundPosition() {
+             const scrollY = window.scrollY;
+             document.body.style.backgroundPositionY = -(scrollY * 0.3) + 'px';
+             ticking = false;
+         }
+
+         window.addEventListener('scroll', () => {
+             lastScrollY = window.scrollY;
+             if (!ticking) {
+                 window.requestAnimationFrame(() => {
+                     updateBackgroundPosition();
+                     ticking = true; // Reset inside if needed, but simpler here
+                 });
+                 ticking = true;
+             }
+         }, { passive: true });
+
+         // Initial background position set
+         updateBackgroundPosition();
+
+
+    </script>
+
+</body>
+</html>
