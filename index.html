@@ -3,420 +3,458 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LKPB Nusikaltimų Tyrimas</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <title>Manga Detektyvas</title>
     <style>
-        /* Custom Styles */
-        :root {
-            --comic-yellow: #ffdd00;
-            --comic-red: #ef4444; /* Tailwind red-500 */
-            --comic-blue: #3b82f6; /* Tailwind blue-500 */
-            --comic-purple: #a855f7; /* Tailwind purple-500 */
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
-            font-family: sans-serif; /* Fallback font */
-            background-image: url('https://aster.cloud/2023/10/15/boxed-reveals-the-terrifying-future-of-a-i-technology-new-york-comic-con-2023/');
-            background-size: cover;
-            background-position: center center;
-            background-attachment: fixed;
+            font-family: 'Verdana', 'Marker Felt', sans-serif; /* Manga-like font */
+            background-color: #f0f0f0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
+            margin: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-29c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm63 59c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-57-5c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-28 28c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm74-28c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zM30 87c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm44-20c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7z' fill='%23a0a0a0' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E"); /* Subtle dot pattern */
+            overflow: hidden; /* To prevent scrollbars during animations */
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border: 3px solid #000; /* Manga panel border */
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #000;
+            text-shadow: 2px 2px #fff, 4px 4px #aaa; /* Manga title effect */
+        }
+
+        .game-selection button {
+            background-color: #000; /* Black buttons like manga ink */
+            color: #fff;
+            border: 2px solid #fff;
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.2em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+            box-shadow: 3px 3px 0 #aaa; /* 3D effect */
+        }
+
+        .game-selection button:hover {
+            transform: scale(1.05) translateY(-2px);
             background-color: #333;
         }
 
-        /* Dot pattern overlay */
-        body::before {
-            content: "";
+        .game-selection button:active {
+            transform: scale(1.02) translateY(0);
+            box-shadow: 1px 1px 0 #aaa;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px);
-            background-size: 8px 8px;
-            opacity: 0.5;
-            z-index: 0;
-            pointer-events: none;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6); /* Darker overlay */
+            animation: fadeInModal 0.5s ease-out;
         }
 
-        /* Content wrapper */
-        .content-wrapper {
-            position: relative;
-            z-index: 1;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 1rem;
-        }
-
-        /* Comic font style for titles */
-        .font-comic {
-            font-family: 'Bangers', cursive;
-            letter-spacing: 1px;
-            -webkit-text-stroke: 1px black;
-            text-stroke: 1px black;
-            color: var(--comic-yellow);
-            text-shadow: 4px 4px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-        }
-
-        /* Comic font style specifically for paragraphs (more readable) */
-        .font-comic-p {
-            font-family: 'Bangers', cursive;
-            letter-spacing: 1px; /* Keep some spacing */
-            color: #4b5563; /* Use a darker gray (Tailwind gray-600) */
-            font-size: 1.25rem; /* Slightly larger for comic feel */
-            line-height: 1.5; /* Adjust line height for Bangers */
-            /* No text stroke or heavy shadow for readability */
-        }
-
-        /* Comic panel style */
-        .comic-panel {
-            border: 3px solid black;
-            background-color: rgba(255, 255, 255, 0.95);
-            box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.8);
-            transform-origin: center center;
-            border-radius: 4px;
-            padding: 1.25rem;
-            margin-bottom: 2.5rem;
-        }
-
-        /* Clickable box style */
-        .clickable-box {
-             cursor: pointer;
-             border: 4px solid black;
-             background-color: rgba(255, 255, 255, 0.9);
-             box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.7);
-             border-radius: 0.5rem;
-             padding: 1.25rem;
-             text-align: center;
-             transition: transform 0.15s ease-out, box-shadow 0.15s ease-out, background-color 0.2s;
-             min-height: 80px;
-             display: flex;
-             align-items: center;
-             justify-content: center;
-        }
-        .clickable-box:hover {
-            background-color: rgba(255, 255, 0, 0.2);
-        }
-        .clickable-box:active {
-            transform: translate(3px, 3px);
-            box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.7);
-        }
-
-        /* Modal style */
-        .comic-modal {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: #fff;
-            border: 8px solid black;
-            box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.5);
-            z-index: 50;
-            opacity: 0; visibility: hidden;
-            transform: scale(0.9) rotate(-5deg);
-            transform-origin: center center;
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.3s ease, visibility 0.3s ease;
-            display: flex; flex-direction: column;
-            padding: 1.5rem;
-            overflow-y: auto;
-        }
-        .comic-modal.active {
-            opacity: 1; visibility: visible;
-            transform: scale(1) rotate(0deg);
-        }
-
-        /* Modal close button style */
-        .comic-close-btn {
-            font-family: 'Bangers', cursive;
-            font-size: 2.5rem; line-height: 1;
-            color: white;
-            background-color: var(--comic-red);
-            border: 3px solid black;
-            width: 50px; height: 50px;
-            display: flex; align-items: center; justify-content: center;
-            position: absolute;
-            top: 10px; right: 10px;
-            cursor: pointer;
-            border-radius: 50%;
-            box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
-            transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
-            z-index: 51;
-        }
-        .comic-close-btn:hover {
-            background-color: #dc2626;
-        }
-        .comic-close-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Scroll animation setup */
-        .scroll-section {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .scroll-section.visible {
-             opacity: 1;
-             transform: translateY(0);
-         }
-
-        /* Modal overlay style */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: rgba(0, 0, 0, 0.3);
-            z-index: 40;
-            opacity: 0; visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            backdrop-filter: blur(2px);
-        }
-        .modal-overlay.active {
-            opacity: 1; visibility: visible;
-        }
-
-        /* Modal content styling */
         .modal-content {
-            margin-top: 60px; /* Space below close button */
-            /* font-size: 1.1rem; Removed, using .font-comic-p now */
-            /* line-height: 1.6; Removed, using .font-comic-p now */
-            color: #333; /* Fallback color */
+            background-color: #fff;
+            margin: 10% auto; /* Centered */
+            padding: 30px;
+            border: 5px solid #000; /* Stronger border for modal */
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: slideInModal 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            transform: translateY(-50px); /* Initial position for slide-in */
+            opacity: 0; /* Start transparent for animation */
         }
-        .modal-content h3 {
-             margin-bottom: 1rem;
+
+        @keyframes fadeInModal {
+            from { background-color: rgba(0,0,0,0); }
+            to { background-color: rgba(0,0,0,0.6); }
         }
-        /* Ensure paragraph inside modal content uses the specific comic font */
-        .modal-content p {
-            /* Styles moved to .font-comic-p and text-center class */
+
+        @keyframes slideInModal {
+            0% {
+                transform: translateY(-80px) scale(0.8);
+                opacity: 0;
+            }
+            70% {
+                transform: translateY(10px) scale(1.02);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #d32f2f; /* Dramatic red for titles */
+        }
+
+        .choices button {
+            display: block;
+            width: calc(100% - 40px);
+            background-color: #eee;
+            color: #333;
+            border: 2px solid #555;
+            padding: 12px 20px;
+            margin: 10px auto;
+            font-size: 1.1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, transform 0.1s;
+        }
+
+        .choices button:hover:not([disabled]) {
+            background-color: #ddd;
+            transform: translateX(5px); /* Slight shift on hover */
+        }
+
+        .choices button.correct {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border-color: #388E3C;
+        }
+
+        .choices button.incorrect {
+            background-color: #f44336; /* Red */
+            color: white;
+            border-color: #D32F2F;
+        }
+
+        .choices button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        #feedback {
+            margin-top: 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+            height: 30px; /* Reserve space to prevent layout shifts */
+        }
+
+        #feedback.correct-text {
+            color: #4CAF50;
+        }
+
+        #feedback.incorrect-text {
+            color: #f44336;
+        }
+
+        #next-button, #restart-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin-top: 20px;
+            font-size: 1.1em;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: none; /* Hidden initially */
+        }
+
+        #next-button:hover, #restart-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Manga style lines/effects (optional) */
+        .speed-lines {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px; /* Adjust as needed */
+            height: 300px; /* Adjust as needed */
+            transform: translate(-50%, -50%);
+            pointer-events: none; /* So they don't interfere with clicks */
+            opacity: 0;
+            animation: speedLinesEffect 0.5s ease-out forwards;
+        }
+
+        .speed-lines span {
+            position: absolute;
+            background-color: #333;
+            opacity: 0.7;
+        }
+
+        /* Example of a few lines for the effect */
+        .speed-lines .line1 { width: 2px; height: 100px; top: 0; left: 50%; transform: translateX(-50%) rotate(10deg); }
+        .speed-lines .line2 { width: 1px; height: 120px; top: 20px; left: 40%; transform: translateX(-50%) rotate(-5deg); }
+        .speed-lines .line3 { width: 2px; height: 90px; top: 10px; left: 60%; transform: translateX(-50%) rotate(25deg); }
+        /* Add more for a better effect */
+
+        @keyframes speedLinesEffect {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            to { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
         }
 
     </style>
 </head>
-<body class="bg-gray-700">
-    <div id="modal-overlay" class="modal-overlay"></div>
+<body>
 
-    <div class="content-wrapper max-w-xl mx-auto"> <div class="flex flex-col items-center justify-center text-center min-h-[50vh] mb-16">
-            <h1 id="main-title" class="font-comic text-5xl xs:text-6xl sm:text-7xl mt-12 mb-6 scroll-section" data-animation="scaleUp">
-                Ištirk nusikaltimus kartu su LKPB
-            </h1>
-            <p id="subtitle" class="text-yellow-300 text-lg font-semibold scroll-section" data-animation="fadeInUp" data-delay="200">
-                Comic Con paslaptys laukia tavęs!
-            </p>
+    <div class="container" id="main-container">
+        <h1>Pasirinkite užduotį</h1>
+        <div class="game-selection">
+            <button id="game1-btn">Paslaptingas pagrobimas</button>
+            <button id="game2-btn">Dingusio komikso byla</button>
         </div>
-
-        <div class="scroll-section comic-panel" data-animation="slideInLeft">
-            <h2 class="font-comic text-3xl mb-3 text-center" style="color: var(--comic-purple);">Kas čia vyksta?!</h2>
-            <p class="text-gray-800 text-center text-lg">
-                Didžiausio populiariosios kultūros renginio metu įvyko keletas paslaptingų incidentų. Tik aštriausias protas gali išnarplioti šias bylas. Ar esi pasiruošęs?
-            </p>
-        </div>
-
-        <div class="scroll-section comic-panel bg-blue-100" data-animation="slideInRight">
-             <h2 class="font-comic text-3xl text-center mb-3" style="color: var(--comic-blue);">Tavo Užduotis</h2>
-             <p class="text-gray-800 text-center text-lg">
-                 Pasirink vieną iš žemiau pateiktų bylų ir sek nuorodas. Kiekviena mįslė priartins tave prie tiesos! Įrodyk, kad esi vertas LKPB detektyvo vardo.
-             </p>
-         </div>
-
-         <div class="scroll-section comic-panel bg-red-100" data-animation="fadeInUp">
-              <img src="https://placehold.co/600x300/ef4444/ffffff?text=Comic+Action+Placeholder" alt="Comic Action Scene" class="w-full h-auto rounded border-2 border-black mb-4 shadow-md">
-             <h3 class="font-comic text-2xl text-center" style="color: var(--comic-red);">Įkalčiai laukia!</h3>
-              <p class="text-gray-700 text-center px-3 pb-2 text-base">
-                  Atidžiai išnagrinėk kiekvieną detalę. Atsakymai gali slėptis netikėčiausiose vietose.
-              </p>
-         </div>
-
-
-        <div id="crime-boxes-section" class="scroll-section w-full pt-8 pb-12" data-animation="fadeIn">
-             <h2 id="crime-title" class="font-comic text-4xl text-center text-yellow-300 mb-8 opacity-0">Pasirink Bylą:</h2>
-            <div id="crime-boxes-container" class="grid grid-cols-1 gap-6">
-                <div id="box-steam" class="clickable-box hover:bg-yellow-100" aria-haspopup="dialog" aria-controls="modal-steam">
-                    <h3 class="font-comic text-3xl" style="color: var(--comic-blue);">Steam Accounto Vagystė</h3>
-                </div>
-                <div id="box-joffrey" class="clickable-box hover:bg-yellow-100" aria-haspopup="dialog" aria-controls="modal-joffrey">
-                    <h3 class="font-comic text-3xl" style="color: var(--comic-red);">King Joffrey Pagrobimas</h3>
-                </div>
-            </div>
-        </div>
-
-         <footer class="text-center p-4 mt-12 text-gray-400 text-sm scroll-section" data-animation="fadeIn">
-            LKPB @ Comic Con Baltics | Visos teisės saugomos (arba ne?)
-        </footer>
-
-    </div> <div id="modal-steam" class="comic-modal" role="dialog" aria-modal="true" aria-labelledby="modal-steam-title">
-        <button class="comic-close-btn close-modal-btn" aria-label="Uždaryti">&times;</button>
-        <div class="modal-content">
-            <h3 id="modal-steam-title" class="font-comic text-3xl text-center" style="color: var(--comic-blue);">Steam Accounto Vagystė</h3>
-            <p class="text-center font-comic-p">
-                Šiandien buvo įvykdytas šiukštus nusikaltimas: pavogtas pagrindinis Comic Con Steam accountas, kuriame yra daugiau nei 2000 žaidimų. Padėk atgauti Steam accounto slaptažodį naudojant šias mysles.
-            </p>
-            </div>
     </div>
 
-    <div id="modal-joffrey" class="comic-modal" role="dialog" aria-modal="true" aria-labelledby="modal-joffrey-title">
-        <button class="comic-close-btn close-modal-btn" aria-label="Uždaryti">&times;</button>
-         <div class="modal-content">
-            <h3 id="modal-joffrey-title" class="font-comic text-3xl text-center" style="color: var(--comic-red);">King Joffrey Pagrobimas</h3>
-             <p class="text-center font-comic-p">
-                Pagrobtas Game of Thrones žvaigždė Jack Gleeson arba žinomas kaip King Joffrey Baratheon. Nors ir daugėlio nekenčiamas, jis privalo sugrįžti į sceną.
-            </p>
-             </div>
+    <div id="game-modal" class="modal">
+        <div class="modal-content">
+            <div id="speed-lines-container"></div> <h2 id="modal-title">Paslaptingas pagrobimas</h2>
+            <div id="question-area">
+                </div>
+            <div id="feedback"></div>
+            <button id="next-button">Toliau</button>
+            <button id="restart-button">Į pradžią</button>
+        </div>
     </div>
 
     <script>
-        // --- DOM Element Selection ---
-        const boxSteam = document.getElementById('box-steam');
-        const boxJoffrey = document.getElementById('box-joffrey');
-        const modalSteam = document.getElementById('modal-steam');
-        const modalJoffrey = document.getElementById('modal-joffrey');
-        const modalOverlay = document.getElementById('modal-overlay');
-        const closeModalBtns = document.querySelectorAll('.close-modal-btn');
-        const scrollSections = document.querySelectorAll('.scroll-section');
-        const crimeBoxesSection = document.getElementById('crime-boxes-section');
+        const gameModal = document.getElementById('game-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const questionArea = document.getElementById('question-area');
+        const feedbackDiv = document.getElementById('feedback');
+        const nextButton = document.getElementById('next-button');
+        const restartButton = document.getElementById('restart-button');
+        const game1Button = document.getElementById('game1-btn');
+        const game2Button = document.getElementById('game2-btn');
+        const mainContainer = document.getElementById('main-container');
+        const speedLinesContainer = document.getElementById('speed-lines-container');
 
-        // --- Modal Functionality ---
-        let activeModal = null;
+        let currentGame = '';
+        let currentStep = 0;
+        let questions = {};
 
-        function openModal(modalElement) {
-            if (activeModal) return;
-            activeModal = modalElement;
-            modalOverlay.classList.add('active');
-            modalElement.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            anime({
-                targets: modalElement, scale: [0.9, 1], rotate: ['-5deg', '0deg'], opacity: [0, 1], duration: 500, easing: 'easeOutElastic(1, .7)'
-            });
-            anime({ targets: modalOverlay, opacity: [0, 1], duration: 300, easing: 'linear' });
-        }
-
-        function closeModal() {
-            if (!activeModal) return;
-            const modalToClose = activeModal;
-            activeModal = null;
-            anime({
-                targets: modalToClose, scale: [1, 0.9], rotate: ['0deg', '5deg'], opacity: [1, 0], duration: 400, easing: 'easeInExpo',
-                complete: () => {
-                     modalToClose.classList.remove('active');
-                     document.body.style.overflow = '';
-                }
-            });
-            anime({
-                targets: modalOverlay, opacity: [1, 0], duration: 300, easing: 'linear',
-                 complete: () => { modalOverlay.classList.remove('active'); }
-            });
-        }
-
-        // --- Modal Event Listeners ---
-        boxSteam.addEventListener('click', () => openModal(modalSteam));
-        boxJoffrey.addEventListener('click', () => openModal(modalJoffrey));
-        closeModalBtns.forEach(btn => btn.addEventListener('click', closeModal));
-        modalOverlay.addEventListener('click', closeModal);
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && activeModal) closeModal();
-        });
-
-        // --- Scroll Animations ---
-        const observerOptions = { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.1 };
-
-        const resetElementStyle = (target, animationType) => {
-            anime.remove(target);
-            target.style.opacity = 0;
-            switch (animationType) {
-                 case 'fadeInUp': target.style.transform = 'translateY(50px)'; break;
-                 case 'fadeInDown': target.style.transform = 'translateY(-50px)'; break;
-                 case 'slideInLeft': target.style.transform = 'translateX(-100px)'; break;
-                 case 'slideInRight': target.style.transform = 'translateX(100px)'; break;
-                 case 'scaleUp': target.style.transform = 'scale(0.85)'; break;
-                 case 'fadeIn': default: target.style.transform = 'translateY(30px)'; break;
+        const game1Questions = [
+            {
+                questionText: "Atvykote į nusikaltimo vietą, kokį veiksmą atliksite pirmiausia?",
+                choices: [
+                    { text: "įvykio vietos apžiūra", correct: true },
+                    { text: "susisiekti su dingusiojo pažįstamais", correct: false },
+                    { text: "susisiekti su renginio organizatoriais", correct: false }
+                ]
+            },
+            {
+                questionText: "Kas galėtų būti kaip nusikaltimo įrodymas?",
+                choices: [
+                    { text: "vėžės", correct: true },
+                    { text: "čekis", correct: false },
+                    { text: "puodelis", correct: false }
+                ]
+            },
+            {
+                questionText: "Kokios transporto priemonės vėžės nusikaltimo vietoje?",
+                choices: [
+                    { text: "motociklas", correct: false },
+                    { text: "sportinis automobilis", correct: false },
+                    { text: "vilkikas", correct: true }
+                ]
+            },
+            {
+                questionText: "Žinant kokia transporto priemonė buvo nusikaltimo vietoje, kokį žingsnį atliksite toliau?",
+                choices: [
+                    { text: "peržiūrėti vaizdo stebėjimo kameras", correct: true },
+                    { text: "ieškoti duomenų bazėje", correct: false },
+                    { text: "laukti kol atsiras liudininkai", correct: false }
+                ]
+            },
+            {
+                questionText: "Kurie numeriai labiausiai išsiskyrė įraše?",
+                choices: [
+                    { text: "NKP123", correct: false },
+                    { text: "DBZ900", correct: true },
+                    { text: "AKP332", correct: false }
+                ]
+            },
+            {
+                questionText: "Koks sekantis žingsnis?",
+                choices: [
+                    { text: "važiuoti įmonės adresu", correct: true },
+                    { text: "išgerti kavos", correct: false },
+                    { text: "tikrinti telefono išklotinę", correct: false }
+                ]
+            },
+            {
+                questionText: "Kaip pateksi į sandėlį?",
+                choices: [
+                    { text: "naudoti termovizorių", correct: false },
+                    { text: "įsilaužti į konteinerius", correct: true },
+                    { text: "suimti visus sandelio darbuotojus", correct: false }
+                ]
             }
-            // Reset crime boxes section children specifically
-             if (target.id === 'crime-boxes-section') {
-                const title = target.querySelector('#crime-title');
-                const boxes = target.querySelectorAll('#crime-boxes-container > div');
-                if(title) { anime.remove(title); title.style.opacity = 0; title.style.transform = 'translateY(20px)'; }
-                boxes.forEach(box => { anime.remove(box); box.style.opacity = 0; box.style.transform = 'scale(0.9)'; });
-             }
-        };
+        ];
 
-        const animateSection = (target, animationType, delay = 0) => {
-             let props = { targets: target, opacity: [0, 1], duration: 800, easing: 'easeOutExpo', delay: delay };
-             switch (animationType) {
-                 case 'fadeInUp': props.translateY = [50, 0]; break;
-                 case 'fadeInDown': props.translateY = [-50, 0]; break;
-                 case 'slideInLeft': props.translateX = [-100, 0]; break;
-                 case 'slideInRight': props.translateX = [100, 0]; break;
-                 case 'scaleUp': props.scale = [0.85, 1]; break;
-                 case 'fadeIn': default: props.translateY = [30, 0]; break;
-             }
-             anime(props);
-        };
+        // Placeholder for game 2 questions - will be defined when info is provided
+        const game2Questions = [
+            // {
+            //     questionText: "Game 2 - Question 1?",
+            //     choices: [
+            //         { text: "G2 Opt1", correct: true },
+            //         { text: "G2 Opt2", correct: false },
+            //         { text: "G2 Opt3", correct: false }
+            //     ]
+            // }
+        ];
 
-        const animateCrimeBoxes = (target) => {
-            const title = target.querySelector('#crime-title');
-            const boxes = target.querySelectorAll('#crime-boxes-container > div');
-            if (title) { anime({ targets: title, translateY: [20, 0], opacity: [0, 1], duration: 500, easing: 'easeOutExpo' }); }
-            // Animate boxes (they use scale animation)
-            anime({ targets: boxes, opacity: [0, 1], scale: [0.9, 1], duration: 700, easing: 'easeOutSine', delay: anime.stagger(150, {start: 100}) });
-        };
 
-        const observerCallback = (entries, observer) => {
-            entries.forEach(entry => {
-                const target = entry.target;
-                const animationType = target.dataset.animation || 'fadeInUp'; // Use default if not specified
-                const delay = parseInt(target.dataset.delay) || 0;
+        function showSpeedLines() {
+            speedLinesContainer.innerHTML = `
+                <div class="speed-lines">
+                    <span class="line1"></span><span class="line2"></span><span class="line3"></span>
+                    <span style="width: 1.5px; height: 80px; top: 70%; left: 45%; transform: translateX(-50%) rotate(-20deg);"></span>
+                    <span style="width: 2.5px; height: 110px; top: 60%; left: 55%; transform: translateX(-50%) rotate(15deg);"></span>
+                </div>`;
+            // Remove after animation
+            setTimeout(() => {
+                speedLinesContainer.innerHTML = '';
+            }, 600);
+        }
 
-                if (entry.isIntersecting) {
-                    target.classList.add('visible');
-                    // Animate the section itself unless its the crime boxes section (handled separately)
-                    if (animationType !== 'none') {
-                         animateSection(target, animationType, delay);
-                    }
-                    // Always animate children of crime boxes section if intersecting
-                    if (target.id === 'crime-boxes-section') {
-                        animateCrimeBoxes(target);
-                    }
-                } else {
-                    target.classList.remove('visible');
-                    // Reset styles only if it has an animation defined OR it's the crime box section
-                    if (animationType !== 'none' || target.id === 'crime-boxes-section') {
-                         resetElementStyle(target, animationType);
-                    }
+        function startGame(gameId) {
+            currentGame = gameId;
+            currentStep = 0;
+            if (gameId === 'game1') {
+                questions = game1Questions;
+                modalTitle.textContent = 'Paslaptingas pagrobimas';
+            } else if (gameId === 'game2') {
+                if (game2Questions.length === 0) {
+                    alert("Antras žaidimas ('Dingusio komikso byla') dar neparuoštas!");
+                    return;
                 }
+                questions = game2Questions;
+                modalTitle.textContent = 'Dingusio komikso byla';
+            } else {
+                return; // Should not happen
+            }
+
+            mainContainer.style.display = 'none';
+            gameModal.style.display = 'flex';
+            showSpeedLines();
+            feedbackDiv.textContent = '';
+            feedbackDiv.className = '';
+            nextButton.style.display = 'none';
+            restartButton.style.display = 'none';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentStep >= questions.length) {
+                finishGame();
+                return;
+            }
+
+            const currentQuestion = questions[currentStep];
+            questionArea.innerHTML = ''; // Clear previous choices
+
+            // Optional: Display question text if you have one per step
+            const questionTextElement = document.createElement('p');
+            questionTextElement.textContent = currentQuestion.questionText || `Klausimas ${currentStep + 1}`;
+            questionTextElement.style.fontSize = "1.4em";
+            questionTextElement.style.marginBottom = "15px";
+            questionArea.appendChild(questionTextElement);
+
+            const choicesDiv = document.createElement('div');
+            choicesDiv.className = 'choices';
+
+            currentQuestion.choices.forEach(choice => {
+                const button = document.createElement('button');
+                button.textContent = choice.text;
+                button.onclick = () => handleAnswer(button, choice.correct, choicesDiv);
+                choicesDiv.appendChild(button);
             });
-        };
+            questionArea.appendChild(choicesDiv);
+        }
 
-        // --- Initialize Observer ---
-        scrollSections.forEach(section => {
-            const animationType = section.dataset.animation || 'fadeInUp';
-            resetElementStyle(section, animationType); // Set initial state
-        });
-        const observer = new IntersectionObserver(observerCallback, observerOptions);
-        scrollSections.forEach(section => observer.observe(section));
+        function handleAnswer(button, isCorrect, choicesContainer) {
+            const buttons = choicesContainer.querySelectorAll('button');
+            buttons.forEach(btn => btn.disabled = true); // Disable all buttons after one is clicked
 
-        // --- Parallax Background ---
-         let lastScrollY = window.scrollY;
-         let ticking = false;
-         function updateBackgroundPosition() {
-             const scrollY = window.scrollY;
-             document.body.style.backgroundPositionY = -(scrollY * 0.15) + 'px';
-             ticking = false;
-         }
-         window.addEventListener('scroll', () => {
-             lastScrollY = window.scrollY;
-             if (!ticking) {
-                 window.requestAnimationFrame(() => { updateBackgroundPosition(); ticking = true; });
-                 ticking = true;
-             }
-         }, { passive: true });
-         updateBackgroundPosition(); // Initial set
+            if (isCorrect) {
+                button.classList.add('correct');
+                feedbackDiv.textContent = 'Teisingas atsakymas!';
+                feedbackDiv.className = 'correct-text';
+                nextButton.style.display = 'inline-block';
+                restartButton.style.display = 'none'; // Hide restart if it was shown for incorrect
+            } else {
+                button.classList.add('incorrect');
+                feedbackDiv.textContent = 'Neteisingas atsakymas.';
+                feedbackDiv.className = 'incorrect-text';
+                nextButton.style.display = 'none';
+                // Allow clicking other options
+                buttons.forEach(btn => {
+                    if (btn !== button) { // Re-enable other buttons
+                        btn.disabled = false;
+                    }
+                });
+                button.disabled = true; // Keep the incorrect one disabled
+            }
+        }
+
+        function nextStep() {
+            currentStep++;
+            feedbackDiv.textContent = '';
+            feedbackDiv.className = '';
+            nextButton.style.display = 'none';
+            loadQuestion();
+        }
+
+        function finishGame() {
+            questionArea.innerHTML = `<p style="font-size: 1.8em; color: #28a745;">Sveikiname įvykdžius užduotį!</p>`;
+            feedbackDiv.textContent = '';
+            nextButton.style.display = 'none';
+            restartButton.style.display = 'inline-block';
+        }
+
+        function resetGame() {
+            gameModal.style.display = 'none';
+            mainContainer.style.display = 'block'; // Show main selection screen
+            currentGame = '';
+            currentStep = 0;
+            questionArea.innerHTML = '';
+            feedbackDiv.textContent = '';
+            feedbackDiv.className = '';
+            nextButton.style.display = 'none';
+            restartButton.style.display = 'none';
+        }
+
+        game1Button.onclick = () => startGame('game1');
+        game2Button.onclick = () => startGame('game2'); // Will show alert if not configured
+        nextButton.onclick = nextStep;
+        restartButton.onclick = resetGame;
+
+        // Close modal if clicked outside the content (optional)
+        window.onclick = function(event) {
+            if (event.target == gameModal) {
+                // Only reset if no game is actively in progress or if desired
+                // For now, let's keep it simple and not close on outside click during game
+                // resetGame();
+            }
+        }
 
     </script>
 
