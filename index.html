@@ -19,6 +19,9 @@
             --comic-green: #22c55e; /* Tailwind green-500 */
             --comic-black: #000000;
             --comic-white: #ffffff;
+            --comic-dark-gray: #333333;
+            --comic-dark-blue: #374151;
+            --comic-light-gray-text: #e0e0e0;
         }
 
         html {
@@ -27,14 +30,14 @@
 
         body {
             font-family: sans-serif; /* Fallback font */
-            background-image: url('https://aster.cloud/2023/10/15/boxed-reveals-the-terrifying-future-of-a-i-technology-new-york-comic-con-2023/');
+            background-image: url('');
             background-size: cover;
             background-position: center center;
             background-attachment: fixed;
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            background-color: #333;
+            background-color: var(--comic-dark-gray); /* Main page background color */
         }
 
         /* Dot pattern overlay */
@@ -72,10 +75,10 @@
         /* Comic font style specifically for paragraphs (more readable) */
         .font-comic-p {
             font-family: 'Bangers', cursive;
-            letter-spacing: 1px; /* Keep some spacing */
-            color: #4b5563; /* Use a darker gray (Tailwind gray-600) */
-            font-size: 1.25rem; /* Slightly larger for comic feel */
-            line-height: 1.5; /* Adjust line height for Bangers */
+            letter-spacing: 1px;
+            color: #4b5563; /* Default dark gray for page content */
+            font-size: 1.25rem;
+            line-height: 1.5;
         }
 
         /* Comic panel style */
@@ -105,7 +108,7 @@
              justify-content: center;
         }
         .clickable-box:hover {
-            background-color: rgba(255, 255, 0, 0.2); /* Yellowish tint on hover */
+            background-color: rgba(255, 255, 0, 0.2);
         }
         .clickable-box:active {
             transform: translate(3px, 3px);
@@ -117,7 +120,8 @@
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background-color: var(--comic-white);
+            /* MODIFIED: Modal background color */
+            background-color: var(--comic-dark-blue);
             border: 8px solid var(--comic-black);
             box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.5);
             z-index: 50;
@@ -126,8 +130,9 @@
             transform-origin: center center;
             transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.3s ease, visibility 0.3s ease;
             display: flex; flex-direction: column;
-            padding: 1rem; /* Reduced padding a bit */
+            padding: 1.5rem; /* Default padding */
             overflow-y: auto;
+            max-height: 100vh; /* Ensure it doesn't exceed viewport height */
         }
         .comic-modal.active {
             opacity: 1; visibility: visible;
@@ -149,10 +154,10 @@
             border-radius: 50%;
             box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
             transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
-            z-index: 51; /* Ensure it's above modal content */
+            z-index: 51;
         }
         .comic-close-btn:hover {
-            background-color: #dc2626; /* Darker red */
+            background-color: #dc2626;
         }
         .comic-close-btn:active {
             transform: translate(2px, 2px);
@@ -186,28 +191,40 @@
         }
 
         /* Modal content styling */
-        .modal-internal-content { /* Renamed to avoid conflict, specific for game */
-            margin-top: 50px; /* Space below close button */
-            color: #333;
+        .modal-internal-content {
+            margin-top: 50px;
+            /* MODIFIED: Text color for dark background */
+            color: var(--comic-light-gray-text);
             text-align: center;
             width: 90%;
-            max-width: 600px; /* Max width for game content */
+            max-width: 600px;
             margin-left: auto;
             margin-right: auto;
         }
-        .modal-internal-content h3 {
+        .modal-internal-content h3 { /* Game Title in Modal */
              margin-bottom: 1rem;
-             font-family: 'Bangers', cursive; /* Ensure Bangers for game title */
+             font-family: 'Bangers', cursive;
              letter-spacing: 1px;
-             font-size: 2.2rem; /* Slightly smaller than page H1 */
+             font-size: 2.2rem;
+             /* Color is set by JS, but a fallback if needed */
+             color: var(--comic-yellow);
+             -webkit-text-stroke: 1px black;
+             text-stroke: 1px black;
         }
+        /* MODIFIED: Question text color inside modal */
+        #game-question-area .font-comic-p {
+            color: var(--comic-light-gray-text); /* Light text for dark modal */
+            font-size: 1.4rem; /* Default size for question */
+            margin-bottom: 15px;
+        }
+
 
         /* Game choice buttons styling */
         .game-choices button {
             display: block;
             width: 100%;
             font-family: 'Bangers', cursive;
-            font-size: 1.5rem; /* Comic-like size */
+            font-size: 1.5rem;
             letter-spacing: 0.5px;
             color: var(--comic-black);
             background-color: var(--comic-white);
@@ -220,7 +237,7 @@
             transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s;
         }
         .game-choices button:hover:not([disabled]) {
-            background-color: #f0f0f0; /* Slight gray on hover */
+            background-color: #f0f0f0;
             transform: translateY(-2px);
             box-shadow: 4px 5px 0px rgba(0, 0, 0, 0.4);
         }
@@ -231,14 +248,14 @@
         .game-choices button.correct {
             background-color: var(--comic-green);
             color: var(--comic-white);
-            border-color: #15803d; /* Darker green */
-            -webkit-text-stroke: 1px black; /* Make text pop on colored bg */
+            border-color: #15803d;
+            -webkit-text-stroke: 1px black;
              text-stroke: 1px black;
         }
         .game-choices button.incorrect {
             background-color: var(--comic-red);
             color: var(--comic-white);
-            border-color: #b91c1c; /* Darker red */
+            border-color: #b91c1c;
             -webkit-text-stroke: 1px black;
              text-stroke: 1px black;
         }
@@ -253,7 +270,7 @@
             font-size: 1.8rem;
             letter-spacing: 1px;
             font-weight: bold;
-            min-height: 40px; /* Reserve space */
+            min-height: 40px;
             -webkit-text-stroke: 0.5px black;
             text-stroke: 0.5px black;
         }
@@ -264,7 +281,6 @@
             color: var(--comic-red);
         }
 
-        /* Next and Restart buttons style */
         .game-nav-button {
             font-family: 'Bangers', cursive;
             font-size: 1.6rem;
@@ -277,7 +293,7 @@
             cursor: pointer;
             box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
             transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.2s;
-            display: none; /* Hidden initially */
+            display: none;
             -webkit-text-stroke: 1px black;
             text-stroke: 1px black;
         }
@@ -285,13 +301,13 @@
             background-color: var(--comic-blue);
         }
         .game-nav-button#next-game-button:hover {
-            background-color: #2563eb; /* Darker blue */
+            background-color: #2563eb;
         }
         .game-nav-button#restart-game-button {
             background-color: var(--comic-purple);
         }
         .game-nav-button#restart-game-button:hover {
-            background-color: #9333ea; /* Darker purple */
+            background-color: #9333ea;
         }
         .game-nav-button:active {
             transform: translate(2px, 2px);
@@ -306,6 +322,91 @@
             margin-bottom: 15px;
         }
 
+        /* --- MOBILE RESPONSIVENESS FOR MODAL --- */
+        @media (max-width: 768px) { /* Tablet and smaller */
+            .comic-modal {
+                padding: 1rem; /* Reduce padding */
+                max-height: 95vh; /* Ensure it fits vertically */
+            }
+            .modal-internal-content {
+                margin-top: 40px; /* Reduce top margin */
+                width: 90vw; /* Use more screen width */
+            }
+            .modal-internal-content h3 { /* Game Title in Modal */
+                font-size: 2rem; /* Slightly smaller title */
+            }
+            #game-question-area .font-comic-p {
+                font-size: 1.2rem; /* Smaller question text */
+            }
+            .game-choices button {
+                font-size: 1.3rem; /* Smaller button text */
+                padding: 8px 12px;
+            }
+            #game-feedback {
+                font-size: 1.5rem; /* Smaller feedback text */
+                min-height: 35px;
+            }
+            .game-nav-button {
+                font-size: 1.4rem; /* Smaller nav buttons */
+                padding: 8px 20px;
+            }
+            #game-completion-message {
+                font-size: 2rem;
+            }
+            .comic-close-btn {
+                width: 40px; height: 40px;
+                font-size: 2rem;
+                top: 8px; right: 8px;
+            }
+        }
+
+        @media (max-width: 480px) { /* Smaller mobile phones */
+            .comic-modal {
+                padding: 0.5rem;
+                border-width: 4px; /* Thinner border */
+                box-shadow: 0 0 0 5px rgba(0,0,0,0.4); /* Smaller shadow */
+            }
+            .modal-internal-content {
+                margin-top: 35px;
+                width: 95vw; /* Even more width */
+            }
+             .modal-internal-content h3 { /* Game Title in Modal */
+                font-size: 1.7rem;
+                margin-bottom: 0.8rem;
+            }
+            #game-question-area .font-comic-p {
+                font-size: 1.1rem;
+                margin-bottom: 10px;
+            }
+            .game-choices button {
+                font-size: 1.1rem;
+                padding: 8px 10px;
+                margin: 6px 0;
+                border-width: 2px;
+                box-shadow: 2px 2px 0px rgba(0,0,0,0.4);
+            }
+            #game-feedback {
+                font-size: 1.3rem;
+                margin-top: 10px;
+                min-height: 30px;
+            }
+            .game-nav-button {
+                font-size: 1.2rem;
+                padding: 7px 15px;
+                margin-top: 15px;
+                border-width: 2px;
+                 box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+            }
+            #game-completion-message {
+                font-size: 1.8rem;
+            }
+             .comic-close-btn { /* Make close button smaller and adjust position */
+                width: 35px; height: 35px;
+                font-size: 1.8rem;
+                top: 5px; right: 5px;
+                border-width: 2px;
+            }
+        }
 
     </style>
 </head>
@@ -376,9 +477,9 @@
 
     <div id="modal-joffrey" class="comic-modal" role="dialog" aria-modal="true" aria-labelledby="modal-joffrey-title">
         <button class="comic-close-btn close-modal-btn" aria-label="Uždaryti">&times;</button>
-         <div class="modal-internal-content"> <h3 id="modal-joffrey-title" class="font-comic text-3xl text-center" style="color: var(--comic-red);">King Joffrey Pagrobimas</h3>
-             <p class="text-center font-comic-p">
-                Pagrobtas Game of Thrones žvaigždė Jack Gleeson arba žinomas kaip King Joffrey Baratheon. Nors ir daugėlio nekenčiamas, jis privalo sugrįžti į sceną.
+         <div class="modal-internal-content">
+            <h3 id="modal-joffrey-title" class="font-comic text-3xl text-center" style="color: var(--comic-red);">King Joffrey Pagrobimas</h3>
+             <p class="text-center font-comic-p" style="color: var(--comic-light-gray-text);"> Pagrobtas Game of Thrones žvaigždė Jack Gleeson arba žinomas kaip King Joffrey Baratheon. Nors ir daugėlio nekenčiamas, jis privalo sugrįžti į sceną.
             </p>
          </div>
     </div>
@@ -386,37 +487,36 @@
 
     <script>
         // --- Original DOM Element Selection & Modal Logic (Slightly Adapted) ---
-        const boxGame1 = document.getElementById('box-game1'); // Changed ID
-        const boxGame2 = document.getElementById('box-game2'); // Changed ID
-        const gamePlayModal = document.getElementById('game-play-modal'); // Main game modal
-        // const modalJoffrey = document.getElementById('modal-joffrey'); // Kept if needed for game 2 intro
+        const boxGame1 = document.getElementById('box-game1');
+        const boxGame2 = document.getElementById('box-game2');
+        const gamePlayModal = document.getElementById('game-play-modal');
         const modalOverlay = document.getElementById('modal-overlay');
         const closeModalBtns = document.querySelectorAll('.close-modal-btn');
         const scrollSections = document.querySelectorAll('.scroll-section');
 
-        let activeModalElement = null; // Renamed to avoid conflict with game's activeModal concept
+        let activeModalElement = null;
 
         function openModal(modalElement) {
             if (activeModalElement) return;
             activeModalElement = modalElement;
             modalOverlay.classList.add('active');
             modalElement.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden'; // Prevent background scroll
             anime({
                 targets: modalElement, scale: [0.9, 1], rotate: ['-5deg', '0deg'], opacity: [0, 1], duration: 500, easing: 'easeOutElastic(1, .7)'
             });
             anime({ targets: modalOverlay, opacity: [0, 1], duration: 300, easing: 'linear' });
         }
 
-        function closeActiveModal() { // Renamed to avoid conflict
+        function closeActiveModal() {
             if (!activeModalElement) return;
             const modalToClose = activeModalElement;
-            activeModalElement = null; // Clear the global active modal
+            activeModalElement = null;
             anime({
                 targets: modalToClose, scale: [1, 0.9], rotate: ['0deg', '5deg'], opacity: [1, 0], duration: 400, easing: 'easeInExpo',
                 complete: () => {
                      modalToClose.classList.remove('active');
-                     document.body.style.overflow = '';
+                     document.body.style.overflow = ''; // Restore background scroll
                 }
             });
             anime({
@@ -425,10 +525,8 @@
             });
         }
 
-        // --- Modal Event Listeners (Original) ---
-        // Game start buttons handled by new game logic
         closeModalBtns.forEach(btn => btn.addEventListener('click', () => {
-            if (activeGameName) { // If a game is active, reset it
+            if (activeGameName) {
                 resetGame();
             } else {
                 closeActiveModal();
@@ -522,81 +620,23 @@
         const nextGameButton = document.getElementById('next-game-button');
         const restartGameButton = document.getElementById('restart-game-button');
 
-        let activeGameName = ''; // To know which game is running
+        let activeGameName = '';
         let currentGameStep = 0;
         let currentQuestions = [];
 
         const game1Data = {
             title: "Paslaptingas pagrobimas",
             questions: [
-                {
-                    questionText: "Kas pirmiausia?",
-                    choices: [
-                        { text: "įvykio vietos apžiūra", correct: true },
-                        { text: "susisiekti su dingusiojo pažįstamais", correct: false },
-                        { text: "susisiekti su renginio organizatoriais", correct: false }
-                    ]
-                },
-                {
-                    questionText: "Ką radai įvykio vietoje?",
-                    choices: [
-                        { text: "automobilio paliktos vėžės", correct: true },
-                        { text: "čekis", correct: false },
-                        { text: "puodelis", correct: false }
-                    ]
-                },
-                {
-                    questionText: "Kokios transporto priemonės vėžės?",
-                    choices: [
-                        { text: "motociklas", correct: false },
-                        { text: "sportinis automobilis", correct: false },
-                        { text: "vilkikas", correct: true }
-                    ]
-                },
-                {
-                    questionText: "Ką darysi toliau?",
-                    choices: [
-                        { text: "peržiūrėti vaizdo stebėjimo kameras", correct: true },
-                        { text: "ieškoti duomenų bazėje", correct: false },
-                        { text: "laukti kol atsiras liudininkai", correct: false }
-                    ]
-                },
-                {
-                    questionText: "Kurie numeriai matyti įraše?",
-                    choices: [
-                        { text: "NKP123", correct: false },
-                        { text: "DBZ900", correct: true },
-                        { text: "AKP332", correct: false }
-                    ]
-                },
-                {
-                    questionText: "Koks sekantis žingsnis?",
-                    choices: [
-                        { text: "važiuoti įmonės adresu", correct: true },
-                        { text: "išgerti kavos", correct: false },
-                        { text: "tikrinti telefono išklotinę", correct: false }
-                    ]
-                },
-                {
-                    questionText: "Kaip pateksi į sandėlį?",
-                    choices: [
-                        { text: "naudoti termovizorių", correct: false },
-                        { text: "įsilaužti į konteinerius", correct: true },
-                        { text: "suimti visus sandelio darbuotojus", correct: false }
-                    ]
-                }
+                { questionText: "Kas pirmiausia?", choices: [ { text: "įvykio vietos apžiūra", correct: true }, { text: "susisiekti su dingusiojo pažįstamais", correct: false }, { text: "susisiekti su renginio organizatoriais", correct: false } ] },
+                { questionText: "Ką radai įvykio vietoje?", choices: [ { text: "automobilio paliktos vėžės", correct: true }, { text: "čekis", correct: false }, { text: "puodelis", correct: false } ] },
+                { questionText: "Kokios transporto priemonės vėžės?", choices: [ { text: "motociklas", correct: false }, { text: "sportinis automobilis", correct: false }, { text: "vilkikas", correct: true } ] },
+                { questionText: "Ką darysi toliau?", choices: [ { text: "peržiūrėti vaizdo stebėjimo kameras", correct: true }, { text: "ieškoti duomenų bazėje", correct: false }, { text: "laukti kol atsiras liudininkai", correct: false } ] },
+                { questionText: "Kurie numeriai matyti įraše?", choices: [ { text: "NKP123", correct: false }, { text: "DBZ900", correct: true }, { text: "AKP332", correct: false } ] },
+                { questionText: "Koks sekantis žingsnis?", choices: [ { text: "važiuoti įmonės adresu", correct: true }, { text: "išgerti kavos", correct: false }, { text: "tikrinti telefono išklotinę", correct: false } ] },
+                { questionText: "Kaip pateksi į sandėlį?", choices: [ { text: "naudoti termovizorių", correct: false }, { text: "įsilaužti į konteinerius", correct: true }, { text: "suimti visus sandelio darbuotojus", correct: false } ] }
             ]
         };
-
-        const game2Data = { // Placeholder for the second game
-            title: "Dingusio komikso byla",
-            questions: [
-                // {
-                //     questionText: "Game 2 - Question 1?",
-                //     choices: [ { text: "G2 Opt1", correct: true }, /* ... */ ]
-                // }
-            ]
-        };
+        const game2Data = { title: "Dingusio komikso byla", questions: [ /* Add questions for game 2 here */ ] };
 
         function startGame(gameId) {
             activeGameName = gameId;
@@ -605,48 +645,38 @@
             if (gameId === 'game1') {
                 currentQuestions = game1Data.questions;
                 gameModalTitle.textContent = game1Data.title;
-                gameModalTitle.style.color = 'var(--comic-blue)'; // Match button
+                gameModalTitle.style.color = 'var(--comic-blue)';
             } else if (gameId === 'game2') {
                 if (game2Data.questions.length === 0) {
                     alert("Antras žaidimas ('Dingusio komikso byla') dar neparuoštas!");
-                    activeGameName = ''; // Reset since game cannot start
-                    return;
+                    activeGameName = ''; return;
                 }
                 currentQuestions = game2Data.questions;
                 gameModalTitle.textContent = game2Data.title;
-                gameModalTitle.style.color = 'var(--comic-red)'; // Match button
-            } else {
-                activeGameName = '';
-                return;
-            }
+                gameModalTitle.style.color = 'var(--comic-red)';
+            } else { activeGameName = ''; return; }
 
             gameFeedbackDiv.textContent = '';
             gameFeedbackDiv.className = '';
             nextGameButton.style.display = 'none';
             restartGameButton.style.display = 'none';
             loadGameQuestion();
-            openModal(gamePlayModal); // Use the existing function to open the game modal
+            openModal(gamePlayModal);
         }
 
         function loadGameQuestion() {
-            gameQuestionArea.innerHTML = ''; // Clear previous content
-
+            gameQuestionArea.innerHTML = '';
             if (currentGameStep >= currentQuestions.length) {
-                finishGame();
-                return;
+                finishGame(); return;
             }
-
             const currentQ = currentQuestions[currentGameStep];
-
             const questionTextP = document.createElement('p');
             questionTextP.textContent = currentQ.questionText || `Klausimas ${currentGameStep + 1}`;
-            questionTextP.className = 'font-comic-p text-xl mb-4'; // Style for question text
-            questionTextP.style.color = '#333';
+            questionTextP.className = 'font-comic-p'; // Class for styling (color already applied in CSS)
             gameQuestionArea.appendChild(questionTextP);
 
             const choicesDiv = document.createElement('div');
             choicesDiv.className = 'game-choices';
-
             currentQ.choices.forEach(choice => {
                 const button = document.createElement('button');
                 button.textContent = choice.text;
@@ -658,22 +688,18 @@
 
         function handleGameAnswer(button, isCorrect, choicesContainer) {
             const buttons = choicesContainer.querySelectorAll('button');
-            // Do not disable all buttons initially, only the clicked one if incorrect.
-            // If correct, all will be disabled effectively by moving to next step or finish.
-
             if (isCorrect) {
                 button.classList.add('correct');
                 gameFeedbackDiv.textContent = 'Teisingas atsakymas!';
                 gameFeedbackDiv.className = 'correct-text';
                 nextGameButton.style.display = 'inline-block';
-                buttons.forEach(btn => btn.disabled = true); // Disable all after correct answer
+                buttons.forEach(btn => btn.disabled = true);
             } else {
                 button.classList.add('incorrect');
-                button.disabled = true; // Disable only the incorrect one
+                button.disabled = true;
                 gameFeedbackDiv.textContent = 'Neteisingas atsakymas.';
                 gameFeedbackDiv.className = 'incorrect-text';
                 nextGameButton.style.display = 'none';
-                // User can click other (still enabled) buttons.
             }
         }
 
@@ -693,15 +719,12 @@
         }
 
         function resetGame() {
-            closeActiveModal(); // Use the existing function to close the modal
+            closeActiveModal();
             activeGameName = '';
             currentGameStep = 0;
             currentQuestions = [];
-            // No need to clear gameQuestionArea here as modal will be hidden
-            // Feedback and buttons will be reset on next game start
         }
 
-        // Event listeners for game buttons
         boxGame1.addEventListener('click', () => startGame('game1'));
         boxGame2.addEventListener('click', () => startGame('game2'));
         nextGameButton.addEventListener('click', nextGameStep);
