@@ -433,18 +433,11 @@
         <div class="scroll-section comic-panel bg-blue-100" data-animation="slideInRight">
              <h2 class="font-comic text-3xl text-center mb-3" style="color: var(--comic-blue);">Tavo Užduotis</h2>
              <p class="text-gray-800 text-center text-lg">
-                 Pasirink vieną iš žemiau pateiktų bylų ir sek nuorodas. Kiekviena mįslė priartins tave prie tiesos! Įrodyk, kad esi vertas LKPB detektyvo vardo.
+                 Pasirink vieną iš žemiau pateiktų bylų ir sek užuominas. Kiekviena mįslė priartins tave prie tiesos! Įrodyk, kad esi vertas LKPB detektyvo vardo.
              </p>
          </div>
 
-         <div class="scroll-section comic-panel bg-red-100" data-animation="fadeInUp">
-              <img src="https://placehold.co/600x300/ef4444/ffffff?text=Comic+Action+Placeholder" alt="Comic Action Scene" class="w-full h-auto rounded border-2 border-black mb-4 shadow-md">
-             <h3 class="font-comic text-2xl text-center" style="color: var(--comic-red);">Įkalčiai laukia!</h3>
-              <p class="text-gray-700 text-center px-3 pb-2 text-base">
-                  Atidžiai išnagrinėk kiekvieną detalę. Atsakymai gali slėptis netikėčiausiose vietose.
-              </p>
-         </div>
-
+         
 
         <div id="crime-boxes-section" class="scroll-section w-full pt-8 pb-12" data-animation="fadeIn">
              <h2 id="crime-title" class="font-comic text-4xl text-center text-yellow-300 mb-8 opacity-0">Pasirink Bylą:</h2>
@@ -627,13 +620,13 @@
         const game1Data = {
             title: "Paslaptingas pagrobimas",
             questions: [
-                { questionText: "Kas pirmiausia?", choices: [ { text: "įvykio vietos apžiūra", correct: true }, { text: "susisiekti su dingusiojo pažįstamais", correct: false }, { text: "susisiekti su renginio organizatoriais", correct: false } ] },
-                { questionText: "Ką radai įvykio vietoje?", choices: [ { text: "automobilio paliktos vėžės", correct: true }, { text: "čekis", correct: false }, { text: "puodelis", correct: false } ] },
-                { questionText: "Kokios transporto priemonės vėžės?", choices: [ { text: "motociklas", correct: false }, { text: "sportinis automobilis", correct: false }, { text: "vilkikas", correct: true } ] },
-                { questionText: "Ką darysi toliau?", choices: [ { text: "peržiūrėti vaizdo stebėjimo kameras", correct: true }, { text: "ieškoti duomenų bazėje", correct: false }, { text: "laukti kol atsiras liudininkai", correct: false } ] },
-                { questionText: "Kurie numeriai matyti įraše?", choices: [ { text: "NKP123", correct: false }, { text: "DBZ900", correct: true }, { text: "AKP332", correct: false } ] },
-                { questionText: "Koks sekantis žingsnis?", choices: [ { text: "važiuoti įmonės adresu", correct: true }, { text: "išgerti kavos", correct: false }, { text: "tikrinti telefono išklotinę", correct: false } ] },
-                { questionText: "Kaip pateksi į sandėlį?", choices: [ { text: "naudoti termovizorių", correct: false }, { text: "įsilaužti į konteinerius", correct: true }, { text: "suimti visus sandelio darbuotojus", correct: false } ] }
+                { questionText: "Comic Con renginio išvakarėse buvo pagrobtas superherojus Šešėlių Vilkas. Ištirk nusikaltimą ir padėk jį surasti. Kas pirmiausia?", choices: [ { text: "įvykio vietos apžiūra", correct: true }, { text: "susisiekti su dingusiojo pažįstamais", correct: false }, { text: "susisiekti su renginio organizatoriais", correct: false } ] },
+                { questionText: "Ką radai įvykio vietoje? (vokas Nr. 1)", choices: [ { text: "automobilio paliktos vėžės", correct: true }, { text: "čekis", correct: false }, { text: "puodelis", correct: false } ] },
+                { questionText: "Kokios transporto priemonės vėžės? (vokas Nr. 2)", choices: [ { text: "motociklas", correct: false }, { text: "sportinis automobilis", correct: false }, { text: "vilkikas", correct: true } ] },
+                { questionText: "Ką darysi toliau?", choices: [ { text: "peržiūrėsi vaizdo stebėjimo kameras", correct: true }, { text: "ieškosi duomenų bazėje", correct: false }, { text: "lauksi, kol atsiras liudytojai", correct: false } ] },
+                { questionText: "Vaizdo kameros stop kadruose suraskite įvykyje dalyvavusį automobilį. Kokie jo valstybiniai numeriai? (vokas Nr. 3)", choices: [ { text: "NKP123", correct: false }, { text: "DBZ900", correct: true }, { text: "AKP332", correct: false } ] },
+                { questionText: "Vilkikas priklauso įmonei „Išprotėjęs profesorius“. Koks sekantis žingsnis?", choices: [ { text: "važiuoti įmonės adresu", correct: true }, { text: "išgerti kavos", correct: false }, { text: "tikrinti telefono išklotinę", correct: false } ] },
+                { questionText: "Įmonės teritorijoje rastas vilkikas ir trys konteineriai (vokas Nr. 4). Laikas išlaisvinti Šešėlių Vilką. Ką darysi?", choices: [ { text: "naudosi termovizorių", correct: false }, { text: "įsilauši į konteinerius", correct: true }, { text: "suimsi visus sandėlio darbuotojus", correct: false } ] }
             ]
         };
         const game2Data = { title: "Dingusio komikso byla", questions: [ /* Add questions for game 2 here */ ] };
