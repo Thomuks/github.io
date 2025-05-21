@@ -624,8 +624,8 @@
                 { questionText: "Ką radai įvykio vietoje? (vokas Nr. 1)", choices: [ { text: "automobilio paliktos vėžės", correct: true }, { text: "čekis", correct: false }, { text: "puodelis", correct: false } ] },
                 { questionText: "Kokios transporto priemonės vėžės? (vokas Nr. 2)", choices: [ { text: "motociklas", correct: false }, { text: "sportinis automobilis", correct: false }, { text: "vilkikas", correct: true } ] },
                 { questionText: "Ką darysi toliau?", choices: [ { text: "peržiūrėsi vaizdo stebėjimo kameras", correct: true }, { text: "ieškosi duomenų bazėje", correct: false }, { text: "lauksi, kol atsiras liudytojai", correct: false } ] },
-                { questionText: "Vaizdo kameros stop kadruose suraskite įvykyje dalyvavusį automobilį. Kokie jo valstybiniai numeriai? (vokas Nr. 3)", choices: [ { text: "NKP123", correct: false }, { text: "DBZ900", correct: true }, { text: "AKP332", correct: false } ] },
-                { questionText: "Vilkikas priklauso įmonei „Išprotėjęs profesorius“. Koks sekantis žingsnis?", choices: [ { text: "važiuoti įmonės adresu", correct: true }, { text: "išgerti kavos", correct: false }, { text: "tikrinti telefono išklotinę", correct: false } ] },
+                { questionText: "Vaizdo kameros stop kadruose surask įvykyje dalyvavusį automobilį. Kokie jo valstybiniai numeriai? (vokas Nr. 3)", choices: [ { text: "NKP123", correct: false }, { text: "DBZ900", correct: true }, { text: "AKP332", correct: false } ] },
+                { questionText: "Vilkikas priklauso įmonei „Išprotėjęs profesorius“. Koks sekantis tavo žingsnis?", choices: [ { text: "važiuoti įmonės adresu", correct: true }, { text: "išgerti kavos", correct: false }, { text: "tikrinti telefono išklotinę", correct: false } ] },
                 { questionText: "Įmonės teritorijoje rastas vilkikas ir trys konteineriai (vokas Nr. 4). Laikas išlaisvinti Šešėlių Vilką. Ką darysi?", choices: [ { text: "naudosi termovizorių", correct: false }, { text: "įsilauši į konteinerius", correct: true }, { text: "suimsi visus sandėlio darbuotojus", correct: false } ] }
             ]
         };
@@ -705,7 +705,7 @@
         }
 
         function finishGame() {
-            gameQuestionArea.innerHTML = `<p id="game-completion-message">Sveikiname įvykdžius užduotį!</p>`;
+            gameQuestionArea.innerHTML = `<p id="game-completion-message">Šešėlių Vilkas išgelbėtas. Sveikiname įvykdžius užduotį!</p>`;
             gameFeedbackDiv.textContent = '';
             nextGameButton.style.display = 'none';
             restartGameButton.style.display = 'inline-block';
