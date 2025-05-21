@@ -322,6 +322,38 @@
             margin-bottom: 15px;
         }
 
+        /* --- NEW: Styles for the completion image frame --- */
+        .completion-image-frame {
+            border: 4px solid var(--comic-yellow); /* Yellow border to match title */
+            background-color: var(--comic-black); /* Black background for contrast */
+            padding: 8px; /* Padding around the image */
+            margin: 20px auto; /* Center the frame and add some space */
+            box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.6); /* Comic style shadow */
+            border-radius: 4px;
+            width: 100%; /* Full width of its container */
+            max-width: 480px; /* Max width for larger screens, adjust as needed */
+        }
+
+        .completion-image-aspect-ratio {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio (9 / 16 * 100) */
+            background-color: var(--comic-dark-gray); /* Placeholder background */
+            border-radius: 2px; /* Slightly rounded corners for the image area */
+            overflow: hidden; /* Ensures image stays within bounds */
+        }
+
+        .completion-image-aspect-ratio img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Covers the area, might crop a bit */
+        }
+        /* --- END NEW STYLES --- */
+
+
         /* --- MOBILE RESPONSIVENESS FOR MODAL --- */
         @media (max-width: 768px) { /* Tablet and smaller */
             .comic-modal {
@@ -357,6 +389,11 @@
                 width: 40px; height: 40px;
                 font-size: 2rem;
                 top: 8px; right: 8px;
+            }
+            /* Adjust image frame for smaller screens if needed */
+            .completion-image-frame {
+                max-width: 90%; /* Allow it to be a bit wider on smaller modal */
+                padding: 6px;
             }
         }
 
@@ -406,6 +443,10 @@
                 top: 5px; right: 5px;
                 border-width: 2px;
             }
+            .completion-image-frame {
+                padding: 4px;
+                max-width: 95%;
+            }
         }
 
     </style>
@@ -436,8 +477,6 @@
                  Pasirink vieną iš žemiau pateiktų bylų ir sek užuominas. Kiekviena mįslė priartins tave prie tiesos! Įrodyk, kad esi vertas LKPB detektyvo vardo.
              </p>
          </div>
-
-         
 
         <div id="crime-boxes-section" class="scroll-section w-full pt-8 pb-12" data-animation="fadeIn">
              <h2 id="crime-title" class="font-comic text-4xl text-center text-yellow-300 mb-8 opacity-0">Pasirink Bylą:</h2>
@@ -489,46 +528,64 @@
 
         let activeModalElement = null;
 
+        // Function to open a modal
         function openModal(modalElement) {
-            if (activeModalElement) return;
+            if (activeModalElement) return; // Prevent opening multiple modals
             activeModalElement = modalElement;
             modalOverlay.classList.add('active');
             modalElement.classList.add('active');
             document.body.style.overflow = 'hidden'; // Prevent background scroll
+            // Animation for modal opening
             anime({
-                targets: modalElement, scale: [0.9, 1], rotate: ['-5deg', '0deg'], opacity: [0, 1], duration: 500, easing: 'easeOutElastic(1, .7)'
+                targets: modalElement,
+                scale: [0.9, 1],
+                rotate: ['-5deg', '0deg'],
+                opacity: [0, 1],
+                duration: 500,
+                easing: 'easeOutElastic(1, .7)'
             });
             anime({ targets: modalOverlay, opacity: [0, 1], duration: 300, easing: 'linear' });
         }
 
+        // Function to close the currently active modal
         function closeActiveModal() {
             if (!activeModalElement) return;
             const modalToClose = activeModalElement;
-            activeModalElement = null;
+            activeModalElement = null; // Clear the active modal
+            // Animation for modal closing
             anime({
-                targets: modalToClose, scale: [1, 0.9], rotate: ['0deg', '5deg'], opacity: [1, 0], duration: 400, easing: 'easeInExpo',
+                targets: modalToClose,
+                scale: [1, 0.9],
+                rotate: ['0deg', '5deg'],
+                opacity: [1, 0],
+                duration: 400,
+                easing: 'easeInExpo',
                 complete: () => {
                      modalToClose.classList.remove('active');
                      document.body.style.overflow = ''; // Restore background scroll
                 }
             });
             anime({
-                targets: modalOverlay, opacity: [1, 0], duration: 300, easing: 'linear',
+                targets: modalOverlay,
+                opacity: [1, 0],
+                duration: 300,
+                easing: 'linear',
                  complete: () => { modalOverlay.classList.remove('active'); }
             });
         }
 
+        // Event listeners for closing modals
         closeModalBtns.forEach(btn => btn.addEventListener('click', () => {
-            if (activeGameName) {
+            if (activeGameName) { // If a game is active, reset it
                 resetGame();
-            } else {
+            } else { // Otherwise, just close the modal
                 closeActiveModal();
             }
         }));
-        modalOverlay.addEventListener('click', () => {
+        modalOverlay.addEventListener('click', () => { // Close modal on overlay click
              if (activeGameName) { resetGame(); } else { closeActiveModal(); }
         });
-        document.addEventListener('keydown', (event) => {
+        document.addEventListener('keydown', (event) => { // Close modal with Escape key
             if (event.key === 'Escape' && activeModalElement) {
                 if (activeGameName) { resetGame(); } else { closeActiveModal(); }
             }
@@ -536,8 +593,10 @@
 
         // --- Scroll Animations (Original - from your file) ---
         const observerOptions = { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.1 };
+        // Function to reset element style before it's re-animated
         const resetElementStyle = (target, animationType) => {
-            anime.remove(target); target.style.opacity = 0;
+            anime.remove(target); // Remove any existing anime.js animations
+            target.style.opacity = 0;
             switch (animationType) {
                  case 'fadeInUp': target.style.transform = 'translateY(50px)'; break;
                  case 'fadeInDown': target.style.transform = 'translateY(-50px)'; break;
@@ -546,6 +605,7 @@
                  case 'scaleUp': target.style.transform = 'scale(0.85)'; break;
                  case 'fadeIn': default: target.style.transform = 'translateY(30px)'; break;
             }
+             // Special handling for crime boxes section
              if (target.id === 'crime-boxes-section') {
                 const title = target.querySelector('#crime-title');
                 const boxes = target.querySelectorAll('#crime-boxes-container > div');
@@ -553,6 +613,7 @@
                 boxes.forEach(box => { anime.remove(box); box.style.opacity = 0; box.style.transform = 'scale(0.9)'; });
              }
         };
+        // Function to animate a section when it becomes visible
         const animateSection = (target, animationType, delay = 0) => {
              let props = { targets: target, opacity: [0, 1], duration: 800, easing: 'easeOutExpo', delay: delay };
              switch (animationType) {
@@ -565,31 +626,38 @@
              }
              anime(props);
         };
+        // Function to animate the crime boxes specifically
         const animateCrimeBoxes = (target) => {
             const title = target.querySelector('#crime-title');
             const boxes = target.querySelectorAll('#crime-boxes-container > div');
             if (title) { anime({ targets: title, translateY: [20, 0], opacity: [0, 1], duration: 500, easing: 'easeOutExpo' }); }
             anime({ targets: boxes, opacity: [0, 1], scale: [0.9, 1], duration: 700, easing: 'easeOutSine', delay: anime.stagger(150, {start: 100}) });
         };
+        // Intersection Observer callback
         const observerCallback = (entries, observer) => {
             entries.forEach(entry => {
                 const target = entry.target;
                 const animationType = target.dataset.animation || 'fadeInUp';
                 const delay = parseInt(target.dataset.delay) || 0;
-                if (entry.isIntersecting) {
+                if (entry.isIntersecting) { // If element is in viewport
                     target.classList.add('visible');
                     if (animationType !== 'none') { animateSection(target, animationType, delay); }
                     if (target.id === 'crime-boxes-section') { animateCrimeBoxes(target); }
-                } else {
+                } else { // If element is out of viewport
                     target.classList.remove('visible');
-                    if (animationType !== 'none' || target.id === 'crime-boxes-section') { resetElementStyle(target, animationType); }
+                    // Reset style if it's not set to 'none' or if it's the crime boxes section
+                    if (animationType !== 'none' || target.id === 'crime-boxes-section') {
+                        resetElementStyle(target, animationType);
+                    }
                 }
             });
         };
+        // Initialize styles for all scroll sections before observing
         scrollSections.forEach(section => {
             const animationType = section.dataset.animation || 'fadeInUp';
             resetElementStyle(section, animationType);
         });
+        // Create and start the Intersection Observer
         const observer = new IntersectionObserver(observerCallback, observerOptions);
         scrollSections.forEach(section => observer.observe(section));
 
@@ -597,14 +665,20 @@
          let lastScrollY = window.scrollY; let ticking = false;
          function updateBackgroundPosition() {
              const scrollY = window.scrollY;
-             document.body.style.backgroundPositionY = -(scrollY * 0.15) + 'px';
+             document.body.style.backgroundPositionY = -(scrollY * 0.15) + 'px'; // Adjust multiplier for speed
              ticking = false;
          }
          window.addEventListener('scroll', () => {
              lastScrollY = window.scrollY;
-             if (!ticking) { window.requestAnimationFrame(() => { updateBackgroundPosition(); ticking = true; }); ticking = true; }
-         }, { passive: true });
-         updateBackgroundPosition();
+             if (!ticking) {
+                 window.requestAnimationFrame(() => {
+                    updateBackgroundPosition();
+                    ticking = true;
+                 });
+                 ticking = true;
+             }
+         }, { passive: true }); // Use passive listener for better scroll performance
+         updateBackgroundPosition(); // Initial call
 
         // --- NEW GAME LOGIC ---
         const gameModalTitle = document.getElementById('game-modal-title');
@@ -613,10 +687,11 @@
         const nextGameButton = document.getElementById('next-game-button');
         const restartGameButton = document.getElementById('restart-game-button');
 
-        let activeGameName = '';
-        let currentGameStep = 0;
-        let currentQuestions = [];
+        let activeGameName = ''; // Stores the ID of the currently active game (e.g., 'game1')
+        let currentGameStep = 0; // Tracks the current question index in the active game
+        let currentQuestions = []; // Array to hold questions for the active game
 
+        // Game data for "Paslaptingas pagrobimas"
         const game1Data = {
             title: "Paslaptingas pagrobimas",
             questions: [
@@ -629,97 +704,145 @@
                 { questionText: "Įmonės teritorijoje rastas vilkikas ir trys konteineriai (vokas Nr. 4). Laikas išlaisvinti Šešėlių Vilką. Ką darysi?", choices: [ { text: "naudosi termovizorių", correct: false }, { text: "įsilauši į konteinerius", correct: true }, { text: "suimsi visus sandėlio darbuotojus", correct: false } ] }
             ]
         };
-        const game2Data = { title: "Dingusio komikso byla", questions: [ /* Add questions for game 2 here */ ] };
+        // Game data for "Dingusio komikso byla" (currently empty)
+        const game2Data = {
+            title: "Dingusio komikso byla",
+            questions: [ /* Add questions for game 2 here if needed */ ]
+        };
 
+        // Function to start a game
         function startGame(gameId) {
             activeGameName = gameId;
-            currentGameStep = 0;
+            currentGameStep = 0; // Reset step to the beginning
 
+            // Load game data based on gameId
             if (gameId === 'game1') {
                 currentQuestions = game1Data.questions;
                 gameModalTitle.textContent = game1Data.title;
-                gameModalTitle.style.color = 'var(--comic-blue)';
+                gameModalTitle.style.color = 'var(--comic-blue)'; // Set title color
             } else if (gameId === 'game2') {
                 if (game2Data.questions.length === 0) {
-                    alert("Antras žaidimas ('Dingusio komikso byla') dar neparuoštas!");
-                    activeGameName = ''; return;
+                    // Using a custom styled alert or message box would be better here
+                    // For now, using browser alert for simplicity if game is not ready
+                    console.warn("Antras žaidimas ('Dingusio komikso byla') dar neparuoštas!");
+                    activeGameName = ''; return; // Exit if game data is missing
                 }
                 currentQuestions = game2Data.questions;
                 gameModalTitle.textContent = game2Data.title;
-                gameModalTitle.style.color = 'var(--comic-red)';
-            } else { activeGameName = ''; return; }
+                gameModalTitle.style.color = 'var(--comic-red)'; // Set title color
+            } else {
+                activeGameName = ''; return; // Invalid game ID
+            }
 
+            // Reset UI elements for the game
             gameFeedbackDiv.textContent = '';
-            gameFeedbackDiv.className = '';
+            gameFeedbackDiv.className = ''; // Clear feedback styling
             nextGameButton.style.display = 'none';
             restartGameButton.style.display = 'none';
-            loadGameQuestion();
-            openModal(gamePlayModal);
+
+            loadGameQuestion(); // Load the first question
+            openModal(gamePlayModal); // Open the game modal
         }
 
+        // Function to load the current game question and choices
         function loadGameQuestion() {
-            gameQuestionArea.innerHTML = '';
+            gameQuestionArea.innerHTML = ''; // Clear previous question
             if (currentGameStep >= currentQuestions.length) {
-                finishGame(); return;
+                finishGame(); // If all questions are answered, finish the game
+                return;
             }
             const currentQ = currentQuestions[currentGameStep];
+
+            // Create and display the question text
             const questionTextP = document.createElement('p');
             questionTextP.textContent = currentQ.questionText || `Klausimas ${currentGameStep + 1}`;
-            questionTextP.className = 'font-comic-p'; // Class for styling (color already applied in CSS)
+            questionTextP.className = 'font-comic-p'; // Apply styling
             gameQuestionArea.appendChild(questionTextP);
 
+            // Create and display the answer choices
             const choicesDiv = document.createElement('div');
             choicesDiv.className = 'game-choices';
             currentQ.choices.forEach(choice => {
                 const button = document.createElement('button');
                 button.textContent = choice.text;
+                // Set click handler for each choice button
                 button.onclick = () => handleGameAnswer(button, choice.correct, choicesDiv);
                 choicesDiv.appendChild(button);
             });
             gameQuestionArea.appendChild(choicesDiv);
         }
 
+        // Function to handle a player's answer
         function handleGameAnswer(button, isCorrect, choicesContainer) {
             const buttons = choicesContainer.querySelectorAll('button');
             if (isCorrect) {
-                button.classList.add('correct');
+                button.classList.add('correct'); // Style for correct answer
                 gameFeedbackDiv.textContent = 'Teisingas atsakymas!';
-                gameFeedbackDiv.className = 'correct-text';
-                nextGameButton.style.display = 'inline-block';
-                buttons.forEach(btn => btn.disabled = true);
+                gameFeedbackDiv.className = 'correct-text'; // Style feedback text
+                nextGameButton.style.display = 'inline-block'; // Show "Next" button
+                buttons.forEach(btn => btn.disabled = true); // Disable all choice buttons
             } else {
-                button.classList.add('incorrect');
-                button.disabled = true;
+                button.classList.add('incorrect'); // Style for incorrect answer
+                button.disabled = true; // Disable the clicked incorrect button
                 gameFeedbackDiv.textContent = 'Neteisingas atsakymas.';
-                gameFeedbackDiv.className = 'incorrect-text';
-                nextGameButton.style.display = 'none';
+                gameFeedbackDiv.className = 'incorrect-text'; // Style feedback text
+                nextGameButton.style.display = 'none'; // Keep "Next" button hidden
             }
         }
 
+        // Function to proceed to the next game step/question
         function nextGameStep() {
             currentGameStep++;
-            gameFeedbackDiv.textContent = '';
+            gameFeedbackDiv.textContent = ''; // Clear feedback
             gameFeedbackDiv.className = '';
-            nextGameButton.style.display = 'none';
-            loadGameQuestion();
+            nextGameButton.style.display = 'none'; // Hide "Next" button
+            loadGameQuestion(); // Load the next question
         }
 
+        // Function to handle game completion
         function finishGame() {
-            gameQuestionArea.innerHTML = `<p id="game-completion-message">Šešėlių Vilkas išgelbėtas. Sveikiname įvykdžius užduotį!</p>`;
-            gameFeedbackDiv.textContent = '';
-            nextGameButton.style.display = 'none';
-            restartGameButton.style.display = 'inline-block';
+            // --- UPDATED finishGame function ---
+            let completionHTML = `<p id="game-completion-message">Šešėlių Vilkas išgelbėtas. Sveikiname įvykdžius užduotį!</p>`;
+
+            // Add the image frame and image placeholder
+            completionHTML += `
+                <div class="completion-image-frame">
+                    <div class="completion-image-aspect-ratio">
+                        <!-- 
+                            PLACE YOUR 16:9 IMAGE URL BELOW.
+                            Example: <img src="https://example.com/your-image.jpg" alt="Misija Įvykdyta!">
+                            For a placeholder, you can use services like placehold.co:
+                            <img src="https://placehold.co/600x338/22c55e/ffffff?text=Sveikiname!" alt="Misija Įvykdyta!">
+                        -->
+                        <img src="https://i.ibb.co/ksHBfsYq/Final-Scene.jpg" alt="Misija Įvykdyta!">
+                    </div>
+                </div>
+            `;
+            // --- END OF UPDATED SECTION ---
+
+            gameQuestionArea.innerHTML = completionHTML;
+            gameFeedbackDiv.textContent = ''; // Clear any previous feedback
+            nextGameButton.style.display = 'none'; // Hide "Next" button
+            restartGameButton.style.display = 'inline-block'; // Show "Restart" button
         }
 
+        // Function to reset the game state and close the modal
         function resetGame() {
-            closeActiveModal();
+            closeActiveModal(); // Close the game modal
+            // Reset game variables
             activeGameName = '';
             currentGameStep = 0;
             currentQuestions = [];
+            // Ensure game area is cleared for next time (optional, as startGame handles this)
+            gameQuestionArea.innerHTML = '';
+            gameFeedbackDiv.textContent = '';
+            nextGameButton.style.display = 'none';
+            restartGameButton.style.display = 'none';
         }
 
+        // Event listeners for game start buttons and navigation
         boxGame1.addEventListener('click', () => startGame('game1'));
-        boxGame2.addEventListener('click', () => startGame('game2'));
+        boxGame2.addEventListener('click', () => startGame('game2')); // Note: Game 2 data is currently empty
         nextGameButton.addEventListener('click', nextGameStep);
         restartGameButton.addEventListener('click', resetGame);
 
