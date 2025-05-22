@@ -704,10 +704,17 @@
                 { questionText: "Įmonės teritorijoje rastas vilkikas ir trys konteineriai (vokas Nr. 4). Laikas išlaisvinti Šešėlių Vilką. Ką darysi?", choices: [ { text: "naudosi termovizorių", correct: false }, { text: "įsilauši į konteinerius", correct: true }, { text: "suimsi visus sandėlio darbuotojus", correct: false } ] }
             ]
         };
-        // Game data for "Dingusio komikso byla" (currently empty)
+        // Game data for "Dingusio komikso byla"
         const game2Data = {
             title: "Dingusio komikso byla",
-            questions: [ /* Add questions for game 2 here if needed */ ]
+            questions: [
+                { questionText: "Comic Con renginio išvakarėse į policiją kreipėsi muziejaus savininkas, kuris pranešė, kad dingo brangus komiksas. Ištirk nusikaltimą ir padėk jį surasti. Ką darysi?", choices: [ { text: "Apsilankysi muziejaus ekspozicijoje", correct: false }, { text: "Apžiūrėsi įvykio vietą", correct: true }, { text: "Išsiaiškinsi, apie ką buvo komiksas", correct: false } ] },
+                { questionText: "Ką radai įvykio vietoje? (Vokas Nr. 1)", choices: [ { text: "Boarding pass'ą", correct: true }, { text: "Šalia gulintį komiksą", correct: false }, { text: "Veidrodį", correct: false } ] },
+                { questionText: "Koks tavo sekantis žingsnis? (Vokas Nr. 2)", choices: [ { text: "Apklausi liudytojus", correct: false }, { text: "Ieškosi duomenų bazėse", correct: true }, { text: "Paklausi ChatGPT", correct: false } ] },
+                { questionText: "Peržiūrėk informaciją iš duomenų bazių (Vokas Nr. 3)", choices: [], isInfoStep: true }, // No choices, info step
+                { questionText: "Tavo veiksmai?", choices: [ { text: "Inicijuosi Europos arešto orderio išdavimą", correct: true }, { text: "Nieko nedarysi, nes asmuo yra kitoje šalyje", correct: false }, { text: "Vyksi savarankiškai sulaikyti nusikaltėlio", correct: false } ] },
+                { questionText: "Nuvykę į asmens gyvenamąją vietą kolegos užsienyje sulaikė vagį ir jo name surado pavogtą komiksą. Ką darysi toliau?", choices: [ { text: "Nueisi pasidžiaugt Comic Con renginiu", correct: true }, { text: "Lauksi, kol jis bus nuteistas toje šalyje", correct: false }, { text: "Organizuosi nusikaltėlio perėmimą iš šalies, kurioje jis buvo sulaikytas", correct: false } ] }
+            ]
         };
 
         // Function to start a game
@@ -722,8 +729,6 @@
                 gameModalTitle.style.color = 'var(--comic-blue)'; // Set title color
             } else if (gameId === 'game2') {
                 if (game2Data.questions.length === 0) {
-                    // Using a custom styled alert or message box would be better here
-                    // For now, using browser alert for simplicity if game is not ready
                     console.warn("Antras žaidimas ('Dingusio komikso byla') dar neparuoštas!");
                     activeGameName = ''; return; // Exit if game data is missing
                 }
@@ -759,17 +764,22 @@
             questionTextP.className = 'font-comic-p'; // Apply styling
             gameQuestionArea.appendChild(questionTextP);
 
-            // Create and display the answer choices
-            const choicesDiv = document.createElement('div');
-            choicesDiv.className = 'game-choices';
-            currentQ.choices.forEach(choice => {
-                const button = document.createElement('button');
-                button.textContent = choice.text;
-                // Set click handler for each choice button
-                button.onclick = () => handleGameAnswer(button, choice.correct, choicesDiv);
-                choicesDiv.appendChild(button);
-            });
-            gameQuestionArea.appendChild(choicesDiv);
+            // Create and display the answer choices OR "Toliau" button for info steps
+            if (currentQ.isInfoStep) {
+                nextGameButton.style.display = 'inline-block'; // Show "Next" button immediately
+                 // We don't need to disable choices because there are none.
+            } else {
+                const choicesDiv = document.createElement('div');
+                choicesDiv.className = 'game-choices';
+                currentQ.choices.forEach(choice => {
+                    const button = document.createElement('button');
+                    button.textContent = choice.text;
+                    // Set click handler for each choice button
+                    button.onclick = () => handleGameAnswer(button, choice.correct, choicesDiv);
+                    choicesDiv.appendChild(button);
+                });
+                gameQuestionArea.appendChild(choicesDiv);
+            }
         }
 
         // Function to handle a player's answer
@@ -801,28 +811,34 @@
 
         // Function to handle game completion
         function finishGame() {
-            // --- UPDATED finishGame function ---
-            let completionHTML = `<p id="game-completion-message">Šešėlių Vilkas išgelbėtas. Sveikiname įvykdžius užduotį!</p>`;
-
-            // Add the image frame and image placeholder
-            completionHTML += `
-                <div class="completion-image-frame">
-                    <div class="completion-image-aspect-ratio">
-                        <!-- 
-                            PLACE YOUR 16:9 IMAGE URL BELOW.
-                            Example: <img src="https://example.com/your-image.jpg" alt="Misija Įvykdyta!">
-                            For a placeholder, you can use services like placehold.co:
-                            <img src="https://placehold.co/600x338/22c55e/ffffff?text=Sveikiname!" alt="Misija Įvykdyta!">
-                        -->
-                        <img src="https://i.ibb.co/ksHBfsYq/Final-Scene.jpg" alt="Misija Įvykdyta!">
+            let completionHTML = '';
+            if (activeGameName === 'game1') {
+                completionHTML = `<p id="game-completion-message">Šešėlių Vilkas išgelbėtas.<br>Sveikiname įvykdžius užduotį!</p>`;
+                // Add the image frame and image placeholder for game 1
+                completionHTML += `
+                    <div class="completion-image-frame">
+                        <div class="completion-image-aspect-ratio">
+                            <img src="https://i.ibb.co/ksHBfsYq/Final-Scene.jpg" alt="Misija Įvykdyta!">
+                        </div>
                     </div>
-                </div>
-            `;
-            // --- END OF UPDATED SECTION ---
+                `;
+            } else if (activeGameName === 'game2') {
+                completionHTML = `<p id="game-completion-message">Nusikaltėlis pargabentas į Lietuvą ir čia sulaukė teisingumo.<br>Sveikiname įvykdžius užduotį!</p>`;
+                 // Add the image frame and image placeholder for game 2
+                 // You might want to use a different image for game 2
+                completionHTML += `
+                    <div class="completion-image-frame">
+                        <div class="completion-image-aspect-ratio">
+                             <img src="https://i.ibb.co/VDBxSms/Comic-Thief-Caught.jpg" alt="Byla Išspręsta!">
+                        </div>
+                    </div>
+                `;
+            }
 
             gameQuestionArea.innerHTML = completionHTML;
             gameFeedbackDiv.textContent = ''; // Clear any previous feedback
             nextGameButton.style.display = 'none'; // Hide "Next" button
+            restartGameButton.textContent = 'Į Pradžią'; // Set button text
             restartGameButton.style.display = 'inline-block'; // Show "Restart" button
         }
 
@@ -842,7 +858,7 @@
 
         // Event listeners for game start buttons and navigation
         boxGame1.addEventListener('click', () => startGame('game1'));
-        boxGame2.addEventListener('click', () => startGame('game2')); // Note: Game 2 data is currently empty
+        boxGame2.addEventListener('click', () => startGame('game2'));
         nextGameButton.addEventListener('click', nextGameStep);
         restartGameButton.addEventListener('click', resetGame);
 
