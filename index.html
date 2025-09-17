@@ -460,7 +460,7 @@
                 Ištirk nusikaltimus kartu su LKPB
             </h1>
             <p id="subtitle" class="text-yellow-300 text-lg font-semibold scroll-section" data-animation="fadeInUp" data-delay="200">
-                Comic Con paslaptys laukia tavęs!
+                LKPB paslaptys laukia tavęs!
             </p>
         </div>
 
@@ -491,7 +491,7 @@
         </div>
 
          <footer class="text-center p-4 mt-12 text-gray-400 text-sm scroll-section" data-animation="fadeIn">
-            LKPB @ Comic Con Baltics | Visos teisės saugomos (arba ne?)
+            LKPB 2025 | Visos teisės saugomos (arba ne?)
         </footer>
     </div>
 
@@ -695,7 +695,7 @@
         const game1Data = {
             title: "Paslaptingas pagrobimas",
             questions: [
-                { questionText: "Comic Con renginio išvakarėse buvo pagrobtas superherojus Šešėlių Vilkas. Ištirk nusikaltimą ir padėk išgelbėti pagrobtą superherojų. Kas pirmiausia?", choices: [ { text: "įvykio vietos apžiūra", correct: true }, { text: "susisiekti su dingusiojo pažįstamais", correct: false }, { text: "susisiekti su renginio organizatoriais", correct: false } ] },
+                { questionText: "Renginio išvakarėse buvo pagrobtas superherojus Šešėlių Vilkas. Ištirk nusikaltimą ir padėk išgelbėti pagrobtą superherojų. Kas pirmiausia?", choices: [ { text: "įvykio vietos apžiūra", correct: true }, { text: "susisiekti su dingusiojo pažįstamais", correct: false }, { text: "susisiekti su renginio organizatoriais", correct: false } ] },
                 { questionText: "Ką radai įvykio vietoje? (vokas Nr. 1)", choices: [ { text: "automobilio paliktos vėžės", correct: true }, { text: "čekis", correct: false }, { text: "puodelis", correct: false } ] },
                 { questionText: "Kokios transporto priemonės vėžės? (vokas Nr. 2)", choices: [ { text: "motociklas", correct: false }, { text: "sportinis automobilis", correct: false }, { text: "vilkikas", correct: true } ] },
                 { questionText: "Ką darysi toliau?", choices: [ { text: "peržiūrėsi vaizdo stebėjimo kameras", correct: true }, { text: "ieškosi duomenų bazėje", correct: false }, { text: "lauksi, kol atsiras liudytojai", correct: false } ] },
@@ -708,12 +708,13 @@
         const game2Data = {
             title: "Dingusio komikso byla",
             questions: [
-                { questionText: "Comic Con renginio išvakarėse į policiją kreipėsi muziejaus savininkas, kuris pranešė, kad dingo brangus komiksas. Ištirk nusikaltimą ir padėk jį surasti. Ką darysi?", choices: [ { text: "Apsilankysi muziejaus ekspozicijoje", correct: false }, { text: "Apžiūrėsi įvykio vietą", correct: true }, { text: "Išsiaiškinsi, apie ką buvo komiksas", correct: false } ] },
-                { questionText: "Ką radai įvykio vietoje? (Vokas Nr. 1)", choices: [ { text: "Boarding pass'ą", correct: true }, { text: "Šalia gulintį komiksą", correct: false }, { text: "Veidrodį", correct: false } ] },
-                { questionText: "Koks tavo sekantis žingsnis? (Vokas Nr. 2)", choices: [ { text: "Apklausi liudytojus", correct: false }, { text: "Ieškosi daugiau informacijos duomenų bazėse", correct: true }, { text: "Paklausi ChatGPT", correct: false } ] },
-                { questionText: "Peržiūrėk informaciją iš duomenų bazių (Vokas Nr. 3)", choices: [], isInfoStep: true }, // No choices, info step
-                { questionText: "Kadangi asmuo gyvena užsienyje, kokie tavo tolimesni veiksmai?", choices: [ { text: "Inicijuosi Europos arešto orderio išdavimą", correct: true }, { text: "Nieko nedarysi, nes asmuo yra kitoje šalyje", correct: false }, { text: "Vyksi savarankiškai sulaikyti nusikaltėlio", correct: false } ] },
-                { questionText: "Nuvykę į asmens gyvenamąją vietą kolegos užsienyje sulaikė vagį ir jo name surado pavogtą komiksą. Ką darysi toliau?", choices: [ { text: "Nueisi pasidžiaugti Comic Con renginiu", correct: false }, { text: "Lauksi, kol jis bus nuteistas toje šalyje", correct: false }, { text: "Organizuosi nusikaltėlio perėmimą iš šalies, kurioje jis buvo sulaikytas", correct: true } ] }
+                { questionText: "Renginio išvakarėse į policiją kreipėsi muziejaus savininkas, kuris pranešė, kad dingo brangus komiksas. Ištirk nusikaltimą ir padėk jį surasti. Ką darysi?", choices: [ { text: "Apsilankysi muziejaus ekspozicijoje", correct: false }, { text: "Apžiūrėsi įvykio vietą", correct: true }, { text: "Išsiaiškinsi, apie ką buvo komiksas", correct: false } ] },
+                { questionText: "Ką radai įvykio vietoje? (Vokas Nr. 1)", choices: [ { text: "Piršto antspaudą", correct: true }, { text: "Šalia gulintį komiksą", correct: false }, { text: "Veidrodį", correct: false } ] },
+                { questionText: "Žinomų komiksų vagių pirštų antspaudų duombzė (Vokas Nr. 2), surask, kuris tai antspaudas", choices: [], isInfoStep: true }, // No choices, info step
+		{ questionText: "Atpažintas piršto antspaudas yra žinomo komiksų vagies Evilis Kaneevilis. Ką darysi toliau? (Vokas Nr. 3)", choices: [ { text: "Važiuosime nurodytu adresu", correct: true }, { text: "Tikrinsime telefoninių skambučių išklotinę", correct: false }, { text: "Susisieksime su interpolu", correct: false } ] },
+                { questionText: "Įtariamojo namuose neradome, kokie tavo tolimesni veiksmai?", choices: [ { text: "Inicijuosi Europos arešto orderio išdavimą", correct: false }, { text: "Nieko nedarysi, nes asmuo ne namuose", correct: false }, { text: "Ieškosi įkalčių", correct: true } ] },
+                { questionText: "Kuriame kambaryje matomi įtartini daiktai?", choices: [ { text: "Valgomasis", correct: false }, { text: "Salonas", correct: false }, { text: "Biblioteka", correct: true } ] },
+		{ questionText: "Vagis bando sprukti į kitą šalį, sučiupk bėglį", choices: [], isInfoStep: true } // No choices, info step
             ]
         };
 
