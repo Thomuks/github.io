@@ -457,24 +457,22 @@
     <div class="content-wrapper max-w-xl mx-auto">
         <div class="flex flex-col items-center justify-center text-center min-h-[50vh] mb-16">
             <h1 id="main-title" class="font-comic text-5xl xs:text-6xl sm:text-7xl mt-12 mb-6 scroll-section" data-animation="scaleUp">
-                Ištirk nusikaltimus kartu su LKPB
+                Ištirk nusikaltimą kartu su LKPB
             </h1>
-            <p id="subtitle" class="text-yellow-300 text-lg font-semibold scroll-section" data-animation="fadeInUp" data-delay="200">
-                LKPB paslaptys laukia tavęs!
-            </p>
+           
         </div>
 
         <div class="scroll-section comic-panel" data-animation="slideInLeft">
             <h2 class="font-comic text-3xl mb-3 text-center" style="color: var(--comic-purple);">Kas čia vyksta?!</h2>
             <p class="text-gray-800 text-center text-lg">
-                Didžiausio populiariosios kultūros renginio metu įvyko keletas paslaptingų incidentų. Tik aštriausias protas gali išnarplioti šias bylas. Ar esi pasiruošęs?
+                Įvyko keletas paslaptingų incidentų.<br> Tik aštriausias protas gali išnarplioti šias bylas.<br> Ar esi pasiruošęs?
             </p>
         </div>
 
         <div class="scroll-section comic-panel bg-blue-100" data-animation="slideInRight">
              <h2 class="font-comic text-3xl text-center mb-3" style="color: var(--comic-blue);">Tavo Užduotis</h2>
              <p class="text-gray-800 text-center text-lg">
-                 Pasirink vieną iš žemiau pateiktų bylų ir sek užuominas. Kiekviena mįslė priartins tave prie tiesos! Įrodyk, kad esi vertas LKPB detektyvo vardo.
+                 Pasirink vieną iš žemiau pateiktų bylų ir sek užuominas.<br> Kiekviena mįslė priartins tave prie tiesos!<br> Įrodyk, kad esi vertas LKPB detektyvo vardo.
              </p>
          </div>
 
@@ -695,13 +693,13 @@
         const game1Data = {
             title: "Paslaptingas pagrobimas",
             questions: [
-                { questionText: "Renginio išvakarėse buvo pagrobtas superherojus Šešėlių Vilkas. Ištirk nusikaltimą ir padėk išgelbėti pagrobtą superherojų. Kas pirmiausia?", choices: [ { text: "įvykio vietos apžiūra", correct: true }, { text: "susisiekti su dingusiojo pažįstamais", correct: false }, { text: "susisiekti su renginio organizatoriais", correct: false } ] },
-                { questionText: "Ką radai įvykio vietoje? (vokas Nr. 1)", choices: [ { text: "automobilio paliktos vėžės", correct: true }, { text: "čekis", correct: false }, { text: "puodelis", correct: false } ] },
-                { questionText: "Kokios transporto priemonės vėžės? (vokas Nr. 2)", choices: [ { text: "motociklas", correct: false }, { text: "sportinis automobilis", correct: false }, { text: "vilkikas", correct: true } ] },
+                { questionText: "Renginio išvakarėse buvo pagrobtas superherojus Šešėlių Vilkas. Ištirk nusikaltimą ir padėk išgelbėti pagrobtą superherojų.<br> Ką darysi pirmiausia?", choices: [ { text: "apžiūrėsi įvykio vietą", correct: true }, { text: "susisieksi su dingusiojo pažįstamais", correct: false }, { text: "susisieksi su renginio organizatoriais", correct: false } ] },
+                { questionText: "Ką radai įvykio vietoje?<br> (vokas Nr. 1)", choices: [ { text: "automobilio paliktos žymės", correct: true }, { text: "čekis", correct: false }, { text: "puodelis", correct: false } ] },
+                { questionText: "Kokios tai transporto priemonės žymės?<br> (vokas Nr. 2)", choices: [ { text: "motociklas", correct: false }, { text: "sportinis automobilis", correct: false }, { text: "vilkikas", correct: true } ] },
                 { questionText: "Ką darysi toliau?", choices: [ { text: "peržiūrėsi vaizdo stebėjimo kameras", correct: true }, { text: "ieškosi duomenų bazėje", correct: false }, { text: "lauksi, kol atsiras liudytojai", correct: false } ] },
-                { questionText: "Vaizdo kameros stop kadruose surask įvykyje dalyvavusį automobilį. Kokie jo valstybiniai numeriai? (vokas Nr. 3)", choices: [ { text: "NKP123", correct: false }, { text: "DBZ900", correct: true }, { text: "AKP332", correct: false } ] },
+                { questionText: "Vaizdo kameros stop kadruose surask įvykyje dalyvavusį automobilį. <br> Kokie jo valstybiniai numeriai?<br> (vokas Nr. 3)", choices: [ { text: "NKP123", correct: false }, { text: "DBZ900", correct: true }, { text: "AKP332", correct: false } ] },
                 { questionText: "Vilkikas priklauso įmonei „Išprotėjęs profesorius“. Koks sekantis tavo žingsnis?", choices: [ { text: "važiuoti įmonės adresu", correct: true }, { text: "išgerti kavos", correct: false }, { text: "tikrinti telefono išklotinę", correct: false } ] },
-                { questionText: "Įmonės teritorijoje rastas vilkikas ir trys konteineriai (vokas Nr. 4). Laikas išlaisvinti Šešėlių Vilką. Ką darysi?", choices: [ { text: "naudosi termovizorių", correct: false }, { text: "įsilauši į konteinerius", correct: true }, { text: "suimsi visus sandėlio darbuotojus", correct: false } ] }
+                { questionText: "Įmonės teritorijoje rastas vilkikas ir trys konteineriai <br> (vokas Nr. 4). <br> Laikas išlaisvinti Šešėlių Vilką. Ką darysi?", choices: [ { text: "naudosi termovizorių", correct: false }, { text: "įsilauši į konteinerius", correct: true }, { text: "suimsi visus sandėlio darbuotojus", correct: false } ] }
             ]
         };
         // Game data for "Dingusio komikso byla"
@@ -814,7 +812,7 @@
         function finishGame() {
             let completionHTML = '';
             if (activeGameName === 'game1') {
-                completionHTML = `<p id="game-completion-message">Šešėlių Vilkas išgelbėtas.<br>Sveikiname įvykdžius užduotį!</p>`;
+                completionHTML = `<p id="game-completion-message">Šešėlių Vilkas išgelbėtas.<br>Sveikiname ištyrus bylą!</p>`;
                 // Add the image frame and image placeholder for game 1
                 completionHTML += `
                     <div class="completion-image-frame">
@@ -824,7 +822,7 @@
                     </div>
                 `;
             } else if (activeGameName === 'game2') {
-                completionHTML = `<p id="game-completion-message">Nusikaltėlis sučiuptas oro uoste ir sulauks teisingumo.<br>Sveikiname įvykdžius užduotį!</p>`;
+                completionHTML = `<p id="game-completion-message">Nusikaltėlis sučiuptas oro uoste ir sulauks teisingumo.<br>Sveikiname ištyrus bylą!</p>`;
                  // Add the image frame and image placeholder for game 2
                  // You might want to use a different image for game 2
                 completionHTML += `
