@@ -707,7 +707,7 @@
             title: "Dingusio komikso byla",
             questions: [
                 { questionText: "Į policiją kreipėsi muziejaus savininkas, kuris pranešė, kad dingo brangus komiksas. Ištirk nusikaltimą ir padėk jį surasti. Ką darysi?", choices: [ { text: "Apsilankysi muziejaus ekspozicijoje", correct: false }, { text: "Apžiūrėsi įvykio vietą", correct: true }, { text: "Išsiaiškinsi, apie ką buvo komiksas", correct: false } ] },
-                { questionText: "Ką radai įvykio vietoje?                                (Vokas Nr. 1)", choices: [ { text: "Piršto antspaudą", correct: true }, { text: "Šalia gulintį komiksą", correct: false }, { text: "Veidrodį", correct: false } ] },
+                { questionText: "Ką radai įvykio vietoje? (Vokas Nr. 1)", questionRext: "Tavo mama", choices: [ { text: "Piršto antspaudą", correct: true }, { text: "Šalia gulintį komiksą", correct: false }, { text: "Veidrodį", correct: false } ] },
                 { questionText: "Paieškok atitikimų duomenų bazėje (Vokas Nr. 2)", choices: [], isInfoStep: true }, // No choices, info step
 		{ questionText: "Piršto antspaudas priklauso žinomam komiksų vagiui Eviliui Kaneeviliui. Ką darysi toliau? (Vokas Nr. 3)", choices: [ { text: "Važiuosi nurodytu adresu", correct: true }, { text: "Tikrinsi telefoninių skambučių išklotinę", correct: false }, { text: "Susisieksi su interpolu", correct: false } ] },
                 { questionText: "Įtariamojo namuose nėra, kokie tavo tolimesni veiksmai?", choices: [ { text: "Paskelbsi tarptautinę paiešką", correct: false }, { text: "Nieko nedarysi, nes asmens nėra namuose", correct: false }, { text: "Ieškosi įkalčių", correct: true } ] },
@@ -764,6 +764,12 @@
             questionTextP.textContent = currentQ.questionText || `Klausimas ${currentGameStep + 1}`;
             questionTextP.className = 'font-comic-p'; // Apply styling
             gameQuestionArea.appendChild(questionTextP);
+
+		// Create and display the question text 2
+            const questionRextQ = document.createElement('q');
+            questionRextQ.textContent = currentQ.questionRext || `Klausimas ${currentGameStep + 1}`;
+            questionRextQ.className = 'font-comic-p'; // Apply styling
+            gameQuestionArea.appendChild(questionRextQ);
 
             // Create and display the answer choices OR "Toliau" button for info steps
             if (currentQ.isInfoStep) {
